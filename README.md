@@ -425,3 +425,49 @@ public boolean canPrintLog(){}
 //默认为true
 public boolean canForwarding()
 ```
+### 四、Cache：这个里面提供了一个单进程缓存框架，跨进程缓存框架，还有JSON反序列化对象的工具类。
+这个缓存部分主要提供了以下几个类：
+```java
+1、CacheHelpManager		：单进程Cache的接口管理类
+2、InjectionCacheHelper	：JSON和对象反序列化和序列化的工具类、
+3、SharedStorgeManager	：进程共享的Cache接口管理类
+```
+1、CacheHelpManager：可以用过这个类获取到一个单进程的Cache的接口实例，例如：
+```java
+public class TEstActivity extends YActivity{
+	public void onCreate(Bundle savedInstanceState){
+		//、、、
+		ICacheAction<String> cacheInterface=CacheHelpManager.bindCacheHelperService(this);
+	}
+}
+```
+ICacheAction提供了如下个函数：
+```java
+/**
+  * 获取缓存中的值
+  * @param key 值的key
+  * @return 获取到的值，如果没有则为null
+  * */
+_Tx get(String key);  
+/**
+  * 向缓存中添加新的键值对
+  * @param key 值的key
+  * @param obj 值
+  * @return 添加成功则返回true
+  * */
+boolean put(String key, _Tx obj);  
+/**
+  * 修改某个键值对的值
+  * @param key 值的key
+  * @param obj 要修改的值
+  * @return 修改成功则返回修改之前的值
+  * */
+_Tx set(String key, _Tx obj); 
+/**
+  * 移除某个键值对
+  * @param key 
+  * @return 移除成功则返回被删除的值
+  * */ 
+_Tx remove(String key);
+```
+# 未完待续。。。

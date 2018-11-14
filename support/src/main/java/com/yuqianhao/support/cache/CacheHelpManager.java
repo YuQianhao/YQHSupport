@@ -6,7 +6,6 @@ public class CacheHelpManager {
     private CacheHelpManager(){}
 
     private static ICacheAction<String> cacheAction;
-    private static CacheInterfaceImplV0 V0INSTANCE;
 
     public static final ICacheAction<String> bindCacheHelperService(Context context){
         if(cacheAction==null){
@@ -15,12 +14,5 @@ public class CacheHelpManager {
         return cacheAction;
     }
 
-
-    public static final CacheInterfaceImplV0 bindCacheHelperServiceV0(Context context){
-        if(V0INSTANCE==null){
-            V0INSTANCE=new CacheInterfaceImplV0(context);
-        }
-        return V0INSTANCE;
-    }
 
 }
