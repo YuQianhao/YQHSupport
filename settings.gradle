@@ -1,0 +1,2 @@
+include ':app', ':yqh_support'
+project(':yqh_support').projectDir = new File('support')
