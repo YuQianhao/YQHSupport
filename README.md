@@ -625,3 +625,189 @@ public interface OnSelectDialogListener{
 }
 ```
 BasisDialog和SelectDialog在YActivity的IYActivityInterface的接口都有提供。可以直接在YActivity中调用showBasisMessageDialog等方法直接创建BasisDialog等。
+### 六、Http：网络请求框架，封装了OkHttp并实现了Get和Post两种请求方式，所有的请求方式都以接口形式提供，可以进行拓展使用。
+可以通过HttpRequestManager这个类获取到IHttpRequestAction这个接口的实例，例如：
+``` java
+public static void main(String[] args){
+	IHttpRequestAction httpRequestAction=HttpRequestManager.getHttpRequestInterface();
+}
+
+public interface IHttpRequestAction {
+    /**
+	  * 发送一个post请求
+	  * @param iHttpRequestBody 请求参数
+	  * @param iHttpRequestResponse 请求返回值
+	  * */
+	  void post(IHttpRequestBody iHttpRequestBody,IHttpRequestResponse iHttpRequestResponse);
+	/**
+	  * 发送一个get请求
+	  * @param iHttpRequestBody 请求参数，<B>当请求为Get的时候，IHttpRequestBody的getRequestBody不会被调用，需要将
+	  * 请求参数合并到请求的URL中<B/>
+	  * @param iHttpRequestResponse 请求返回值
+	  * */
+	  void get(IHttpRequestBody iHttpRequestBody,IHttpRequestResponse iHttpRequestResponse);
+}
+```
+例如要发送一个post请求：
+``` java
+public class TestActivity extends YActivity {
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		IHttpRequestAction httpRequestAction=HttpRequestManager.getHttpRequestInterface();
+		httpRequestAction.post(new AbsHttpFormRequestBody(){
+			@Override
+			public String getRequestURL() {
+				return "https://www.yuqianhao.com/developer/suppoer/android/httptest/hello.do";
+			}
+
+			@Override
+			protected void makeRequestParameter(Map<String, Object> parmaterMap) {
+				parmaterMap.put("userKey","ds1f23sd1fg23s1d23fg1s23dg1");
+				parmaterMap.put("action",65);
+				parmaterMap.put("data","Hello World!");
+			}
+
+			@Override
+			protected void makeRequestHeader(Map<String, String> requestHeaders) {
+				requestHeaders.put("key","com.yuqianhao.developer.android.request");
+			}
+        },new AbsHttpJsonRequestResponse(){
+			@Override
+			protected void onUIResult(int code, JSONObject body, Exception e) {
+            }
+			@Override
+			protected void onResult(int code, JSONObject body, Exception e) {
+            }
+        });
+  }
+}
+```
+值得注意的是post的参数1是IHttpRequestBody，这个接口定义如下：
+``` java
+/**
+  * 获取请求地址
+  * @return 请求地址
+  * */
+  String getRequestURL();
+/**
+  * 获取请求的参数
+  * @return 请求参数
+  * */
+  RequestBody getRequestBody();
+/**
+  * 修改请求的Header的值
+  * @param headers 请求Header值的Map
+  * */
+  void makeRequestHeaders(Map<String,String> headers);
+```
+而预设了两个实现了这个接口的类，例如AbsHttpFormRequestBody封装了请求方式为Form表单的请求方式，AbsHttpJsonRequestBody是传参为Json的方式：
+``` java
+httpRequestAction.post(new AbsHttpJsonRequestBody(){
+			@Override
+			public String getRequestURL() {
+				return "https://www.yuqianhao.com/developer/suppoer/android/httptest/hello.do";
+			}
+
+			/**
+			  * 变化在这里
+			  **/
+			@Override
+			protected void makeRequestParameter(JsonObject jsonObject) {
+				jsonObject.put("userKey","ds1f23sd1fg23s1d23fg1s23dg1");
+				jsonObject.put("action",65);
+				jsonObject.put("data","Hello World!");
+			}
+
+			@Override
+			protected void makeRequestHeader(Map<String, String> requestHeaders) {
+				requestHeaders.put("key","com.yuqianhao.developer.android.request");
+			}
+        },new AbsHttpJsonRequestResponse(){
+			@Override
+			protected void onUIResult(int code, JSONObject body, Exception e) {
+            }
+			@Override
+			protected void onResult(int code, JSONObject body, Exception e) {
+            }
+        });
+```
+post的第二个参数是IHttpRequestResponse接口，这个接口的定义如下：
+``` java
+public interface IHttpRequestResponse {
+    /**
+      * 请求结果回调方法
+      * @param requestCode 请求返回码
+      * @param response 请求结果，当请求失败的时候这个值为null
+      * @param e 请求出错的时候这个Exception会被赋值，请求成功的时候为null
+      * */
+      void onResult(int requestCode, Response response ,Exception e) throws IOException;
+}
+```
+其中预设了两个类实现了这个接口，分别是AbsHttpStringRequestResponse和AbsHttpJsonRequestResponse，分别包装了请求结果为String和Json，不管是什么样的返回值都会有这两个方法，重载这两个方法即可获取到返回结果：
+``` java
+/**
+  * 这个方法会在主线程中被调用
+  * @param code 请求返回的请求码
+  * @param body 请求返回值，如果请求失败了这个值为null
+  * @param e 如果请求发生异常这个值不为null
+  * */
+  protected void onUIResult(int code,String body,Exception e){}
+
+/**
+  * 这个方法会在子线程
+  * @param code 请求返回的请求码
+  * @param body 请求返回值，如果请求失败了这个值为null
+  * @param e 如果请求发生异常这个值不为null
+  * */
+  protected void onResult(int code,String body,Exception e){}
+```
+### 六、IO：提供了一个IO流的工具类BufferIOStreamManager
+可以使用BufferIOStreamManager获取到一个实现了IBufferIOStreamAction接口的实例，接口定义如下：
+``` java
+public interface IBufferIOStreamAction {
+    /**
+      * <B>同步<B/>读取文件中的内容
+	  * @param filePath 要读取文件的路径
+	  * @return 文件中的内容
+	  * */
+    String readFile(String filePath) throws IOException;
+  /**
+    * <B>同步<B/>读取文件中的内容
+    * @param file 要读取文件
+    * @return 文件中的内容
+    * */
+  String readFile(File file) throws IOException;
+  /**
+    * <B>同步<B/>写出数据到文件
+    * @param filePath 要写出的文件的路径
+    * @param data 要写出的数据
+    * @return 写出是否成功
+    * */
+  boolean writeFile(String filePath,byte[] data) throws IOException;
+  /**
+    * <B>同步<B/>写出数据到文件
+    * @param filePath 要写出的文件的路径
+    * @param data 要写出的数据
+    * @return 写出是否成功
+    * */
+  boolean writeFile(String filePath,String data) throws IOException;
+  /**
+    * <B>同步<B/>写出数据到文件
+    * @param file 要写出的文件
+    * @param data 要写出的数据
+    * @return 写出是否成功
+   * */
+  boolean writeFile(File file,byte[] data) throws IOException;
+  /**
+    * <B>同步<B/>写出数据到文件
+    * @param file 要写出的文件
+    * @param data 要写出的数据
+    * @return 写出是否成功
+  * */
+  boolean writeFile(File file,String data) throws IOException;
+}
+```
+这些方法在YActivity中有提供。
+# 未完待续。。。。。
