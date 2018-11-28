@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.Html;
 import android.text.Spanned;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -81,7 +82,7 @@ public class SelectDialog implements View.OnClickListener{
     }
 
     public void setDialogTitle(String text){
-        dialogTitleView.setText(text);
+        dialogTitleView.setText(Html.fromHtml(text));
     }
 
     public void setDialogTitle(Spanned spinner){
