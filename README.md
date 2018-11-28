@@ -434,10 +434,12 @@ public boolean canForwarding()
 ```
 1、CacheHelpManager：可以用过这个类获取到一个单进程的Cache的接口实例，例如：
 ```java
-public class TEstActivity extends YActivity{
+public class TestActivity extends YActivity{
 	public void onCreate(Bundle savedInstanceState){
 		//、、、
 		ICacheAction<String> cacheInterface=CacheHelpManager.bindCacheHelperService(this);
+		cacheInterface.put("testKey","Hello World!");
+		cacheInterface.get("testKey");
 	}
 }
 ```
@@ -448,26 +450,178 @@ ICacheAction提供了如下个函数：
   * @param key 值的key
   * @return 获取到的值，如果没有则为null
   * */
-_Tx get(String key);  
+_Tx get(String key);
 /**
   * 向缓存中添加新的键值对
   * @param key 值的key
   * @param obj 值
   * @return 添加成功则返回true
   * */
-boolean put(String key, _Tx obj);  
+boolean put(String key, _Tx obj);
 /**
   * 修改某个键值对的值
   * @param key 值的key
   * @param obj 要修改的值
   * @return 修改成功则返回修改之前的值
   * */
-_Tx set(String key, _Tx obj); 
+_Tx set(String key, _Tx obj);
 /**
   * 移除某个键值对
-  * @param key 
+  * @param key
   * @return 移除成功则返回被删除的值
-  * */ 
+  * */
 _Tx remove(String key);
 ```
-# 未完待续。。。
+值得注意的是，单进程的缓存策略是在app目录下(/data/data)创建一个文件夹来缓存所有的数据，其中每一个key都是一个文件，在初始化的时候会从本地将所有的缓存文件读取到内存中使用Map缓存，例如这是其中的一个接口实现类：
+``` java
+//接口的实例
+public CacheInterfaceImplV0(Context context){
+	  cacheWriterV0=new _CacheWriterV0(keyMap,thread,"/data/data/"+context.getPackageName());
+	  cacheWriterV0.initKeyValue();
+}
+//_CacheWriterV0的代码片段
+public void initKeyValue(){
+     File[] fileList=new File(makeAbsPath()).listFiles();
+	 for(File file:fileList){
+		 String key=file.getName().substring(1);
+		 String value=null;
+	 try {
+         BufferedInputStream bufferedInputStream=
+                    new BufferedInputStream(
+                            new FileInputStream(makeAbsPath()+"/"+
+                                makeFileName(key)));
+		 byte[] bytes=new byte[(int) file.length()];
+	     bufferedInputStream.read(bytes);
+         bufferedInputStream.close();
+         value=new String(bytes,"UTF-8");
+	   } catch (FileNotFoundException e) {
+            e.printStackTrace();
+	   } catch (IOException e) {
+            e.printStackTrace();
+	   }
+        keyMap.put(key,value);
+	   }
+}
+```
+2、SharedStorgeManager：这是一个能跨进程也能单进程的缓存的解决方案，相对来数能用这个就用这个，这个内部封装了腾讯的MMKV，内部原理使用mmap进行文件映射实现，效率高的吓人：
+``` java
+public class TestActivity extends YActivity{
+	public void onCreate(Bundle savedInstanceState){
+		//、、、
+		//获取不共享内存的缓存接口
+		ISharedStorageInterface sharedInterface=SharedStorgeManager.getDefaultInterface();
+		//获取默认的共享内存的存储策略借口
+		ISharedStorageInterface sharedProcessInterface=SharedStorgeManager.getDefaultProcessStorageInterface();
+	}
+}
+```
+``` java
+public interface ISharedStorageInterface {
+	 void add(String key,boolean value);
+	 void add(String key,int value);
+	 void add(String key,float value);
+	 void add(String key,double value);
+	 void add(String key,long value);
+	 void add(String key,String value);
+	 void add(String key,byte[] bytes);
+	 void add(String key, Set<String> value);
+	 boolean getBoolean(String key);
+	 int getInt(String key);
+	 float getFloat(String key);
+	 double getDouble(String key);
+	 long getLong(String key);
+	 String getString(String key);
+	 byte[] getByteArray(String key);
+	 Set<String> getStringList(String key);
+	 boolean hasValue(String key);
+	 void removeValue(String ...key);
+}
+```
+SharedStorgeManager还提供了额外的方法，例如：
+``` java
+/**
+  * 获取指定名称的不共享内存的存储策略借口
+  * @return {@link ISharedStorageInterface}
+  * */
+  public static final ISharedStorageInterface getSharedStorageInterface(String name);
+
+/**
+  * 获取指定名称的共享内存的存储策略借口
+  * @return {@link ISharedStorageInterface}
+  * */
+  public static final ISharedStorageInterface getProcessSharedStorageInterface(String name);
+}
+```
+**我建议使用 SharedStorgeManager 提供的解决方案，因为效率相对于CacheHelpManager有很大的提升。CacheHelpManager是V0提供的，没删除，有老项目在沿用。。**
+### 五、Dialog：提供了一些基本的可拓展的对话框，例如BasisDialog，SelectDialog，UpdateDialog。
+``` java
+BasisDialog		:基本消息对话框
+SelectDialog	:选择对话框
+UpdateDialog	:更新对话框
+```
+1、BasisDialog：基本对话框，可以添加标题，内容，可以设定三个按钮以及点击事件，可以想这个对话框添加任意View。
+![](https://github.com/YuQianhao/YQHSupport/blob/master/basisidialog0.png)
+![](https://github.com/YuQianhao/YQHSupport/blob/master/basisdialog1.png)
+``` java
+public class TestActivity extends YActivity{
+	public void onCreate(Bundle savedInstanceState){
+		//、、、
+		BasisDialog dialog=new BasisDialog(this);
+	}
+}
+//BasisDialog提供的方法
+//设置标题
+dialog.setTitle(String str);
+//设置消息内容，支持html
+dialog.setContextMessage(String str);
+//设置左侧第一个按钮，参数一是标题内容，支持html
+dialog.setLeftButton(String str,View.OnClickListener click);
+//设置左侧第二个按钮，参数一是标题内容，支持html
+dialog.setMiddleButton(String str,View.OnClickListener click);
+//设置左侧第三个按钮，参数一是标题内容，支持html
+dialog.setRightButton(String str,View.OnClickListener click);
+//向对话框中添加View
+dialog.addView(View view);
+//展示
+dialog.show();
+//判断是否正在展示
+dialog.isShow();
+//关闭对话框
+dialog.dismiss();
+//触摸对话框外部是否可以关闭对话框
+dialog.setCanceledOnTouchOutside(boolean canceled);
+//设置对话框关闭监听器
+dialog.setOnCancelListener(DialogInterface.OnCancelListener onCancelListener);
+
+```
+2、SelectDialog：选择对话框。
+![](https://github.com/YuQianhao/YQHSupport/blob/master/selectdialog.png)
+``` java
+//设置选择监听器
+public void setOnSelectDialogListener(OnSelectDialogListener onSelectDialogListener);
+//设置标题内容，支持Html
+public void setDialogTitle(String text);
+//关闭对话框
+public void dismiss();
+//展示对话框
+public void show();
+//判断对话框是否展示
+public boolean isShowing();
+//向对话框中添加Item
+public void addItem(String text,int color);
+//向对话框中添加Item
+public void addItem(String text);
+//清空所有item
+public void clearAllItem();
+
+//OnSelectDialogListener接口定义
+public interface OnSelectDialogListener{
+	/**
+	  * @param dialog 对话框引用
+	  * @param i 用户点击的item索引，-1是取消按钮
+	  * @param text 用户点击的item的内容
+	  **/
+    void onSelectItem(SelectDialog dialog, int i, String text);
+}
+```
+BasisDialog和SelectDialog在YActivity的IYActivityInterface的接口都有提供。可以直接在YActivity中调用showBasisMessageDialog等方法直接创建BasisDialog等。
