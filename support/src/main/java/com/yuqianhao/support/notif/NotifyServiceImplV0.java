@@ -38,7 +38,7 @@ public class NotifyServiceImplV0 implements INotifyService {
                         windowManager.removeView(notifyTextView);
                         notifyTextView=null;
                     }
-                    setStabar(lastStabarColor,laststabarBright);
+                    setStabar(msg.arg1,msg.arg2==1);
                     if(onMessageNotifyCallback!=null){
                         onMessageNotifyCallback.onMessageNotifyClose();
                     }
@@ -67,6 +67,14 @@ public class NotifyServiceImplV0 implements INotifyService {
     }
 
 
+    /**
+     * 显示一个提示的View
+     * @param msg 要显示的内容
+     * @param backgroundColor 提示框的背景颜色
+     * @param textColor 提示框的文字颜色
+     * @param stabarBright 当前状态栏的背景颜色
+     * @param stabarColor 当前状态栏是否为亮色
+     * */
     @Override
     public void showMessageView(String msg,
                                 int backgroundColor,
@@ -91,6 +99,8 @@ public class NotifyServiceImplV0 implements INotifyService {
         if(isShowing){
             Message message=handler.obtainMessage();
             message.what=WHAT_DISTORYDIALOG;
+            message.arg1=stabarColor;
+            message.arg2=stabarBright?1:0;
             handler.sendMessageDelayed(message,1500);
         }
     }

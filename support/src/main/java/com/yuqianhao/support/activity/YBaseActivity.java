@@ -213,6 +213,8 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
                                 int textColor,
                                 int stabarColor,
                                 boolean stabarBright) {
+
+        NotifyServiceManager.setNotifyServiceActivity(notifyService,this);
         notifyService.showMessageView(msg,backgroundColor,setStabarBright,textColor,stabarColor,stabarBright);
     }
 
@@ -224,9 +226,11 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
         if(stateBar!=null){
             stabarColor=stateBar.color();
             stabarBright=stateBar.fontDark();
+        }else{
+            YLog.warn(this,"showSuccressNotifyMsg ：We did not get the original StateBar annotation object for the Activity. Did we forget the annotation?");
         }
         showMessageView(msg,
-                0xffe34742,
+                0xff2E8B57,
                 true,
                 Color.WHITE,
                 stabarColor,
@@ -241,6 +245,8 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
         if(stateBar!=null){
             stabarColor=stateBar.color();
             stabarBright=stateBar.fontDark();
+        }else{
+            YLog.warn(this,"showErrorNotifyMsg ：We did not get the original StateBar annotation object for the Activity. Did we forget the annotation?");
         }
         showMessageView(msg,
                 0xffe34742,
@@ -289,7 +295,6 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
     @CallSuper
     @Override
     protected void onResume() {
-        NotifyServiceManager.setNotifyServiceActivity(notifyService,this);
         super.onResume();
     }
 
