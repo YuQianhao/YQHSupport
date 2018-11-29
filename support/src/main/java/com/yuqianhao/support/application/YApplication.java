@@ -4,6 +4,9 @@ import android.app.ActivityManager;
 import android.app.Application;
 
 import com.yuqianhao.support.log.ILogForwarding;
+import com.yuqianhao.support.notif.IToast;
+import com.yuqianhao.support.notif.ToastImpl;
+import com.yuqianhao.support.notif.YToast;
 
 import java.util.List;
 
@@ -12,6 +15,8 @@ public class YApplication extends Application implements Thread.UncaughtExceptio
     private static YApplication application=null;
 
     private final String PACKAGENAME=getPackageName();
+
+
 
     protected boolean canOpenSetDefaultUncaughtExceptionHandler(){
         return false;
@@ -64,4 +69,9 @@ public class YApplication extends Application implements Thread.UncaughtExceptio
     public boolean canForwarding() {
         return true;
     }
+
+    public final void showToast(Object o){
+        YToast.showToast(this,o.toString());
+    }
+
 }

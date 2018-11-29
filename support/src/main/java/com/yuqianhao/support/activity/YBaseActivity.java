@@ -9,7 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 import com.githang.statusbar.StatusBarCompat;
+import com.yuqianhao.support.application.YApplication;
 import com.yuqianhao.support.cache.CacheHelpManager;
 import com.yuqianhao.support.cache.ICacheAction;
 import com.yuqianhao.support.dialog.BasisDialog;
@@ -22,10 +24,8 @@ import com.yuqianhao.support.io.BufferIOStreamManager;
 import com.yuqianhao.support.io.IBufferIOStreamAction;
 import com.yuqianhao.support.log.YLog;
 import com.yuqianhao.support.notif.INotifyService;
-import com.yuqianhao.support.notif.IToast;
 import com.yuqianhao.support.notif.NotifyServiceImplV0;
 import com.yuqianhao.support.notif.NotifyServiceManager;
-import com.yuqianhao.support.notif.ToastImpl;
 import com.yuqianhao.support.service.image.IImageLoader;
 import com.yuqianhao.support.service.image.ImageLoaderManager;
 import com.yuqianhao.support.thread.IThreadAction;
@@ -40,7 +40,6 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
     private ICacheAction<String> CACHE_ACTION;
     private static final IHttpRequestAction HTTP_REQUEST_ACTION= HttpRequestManager.getHttpRequestInterface();
     private static final IBufferIOStreamAction BUFFER_IO_STREAM_ACTION= BufferIOStreamManager.getBufferIoStreamInterface();
-    private static final IToast TOAST=new ToastImpl();
     private final INotifyService notifyService= NotifyServiceManager.getInstance(this,this);
     private ProgressDialog progressDialog=null;
 
@@ -163,6 +162,15 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
     }
 
     @Override
+    public void showToast(Object o) {
+        if(getApplication() instanceof YApplication){
+            YApplication.getInstance().showToast(o);
+        }else{
+            Toast.makeText(this,o.toString(),Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public void logDebug(String msg) {
         YLog.debug(this,msg);
     }
@@ -202,10 +210,6 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
         YLog.error(this,msg,e);
     }
 
-    @Override
-    public void showToast(String msg) {
-        TOAST.showToast(this,msg);
-    }
 
     private final void showMessageView(String msg,
                                 int backgroundColor,

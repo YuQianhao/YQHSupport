@@ -113,6 +113,10 @@ public interface IYActivityInterface {
      * @return  读取到的数据
      * */
     String readData(String path) throws IOException;
+    /**
+     * 显示一个Toast通知框，注意，如果Application不是YApplication的子类这个方法会使用Toast.make来创建，不会使用YToast
+     * */
+    void showToast(Object o);
     void logDebug(String msg);
     void logWarn(String msg);
     void logInfo(String msg);
@@ -121,7 +125,6 @@ public interface IYActivityInterface {
     void logWarn(String msg, Exception e);
     void logInfo(String msg, Exception e);
     void logError(String msg, Exception e);
-    void showToast(String msg);
     void showSuccressNotifyMsg(String msg);
     void showErrorNotifyMsg(String msg);
     void setStateBarColorBright(int color);

@@ -236,40 +236,39 @@ void logWarn(String msg, Exception e);
 void logInfo(String msg, Exception e);  
 void logError(String msg, Exception e);  
 /**
-  * 显示一个短时间的toast
-  * @param msg Toast的内容
-  * */
-void showToast(String msg);  
+ * 显示一个Toast通知框，注意，如果Application不是YApplication的子类这个方法会使用Toast.make来创建，不会使用YToast
+ * */
+void showToast(Object o);
 /**
   * 在窗口的顶部显示一个背景为绿色的信息框，持续1500ms
   * @param msg 显示的内容
   * */
-void showSuccressNotifyMsg(String msg);  
+void showSuccressNotifyMsg(String msg);
 /**
   * 在窗口的顶部显示一个背景为红色的信息框，持续1500ms
   * @param msg 显示的内容
   * */
-void showErrorNotifyMsg(String msg);  
+void showErrorNotifyMsg(String msg);
 /**
   * 设置状态栏颜色为浅色，即字体为黑色
   * @param color 状态栏颜色
   * */
-void setStateBarColorBright(int color);  
+void setStateBarColorBright(int color);
 /**
   * 设置状态栏颜色为深色，即字体为白色
   * @param color 状态栏颜色
   * */
-void setStateBarColorDark(int color);  
+void setStateBarColorDark(int color);
 /**
   * 显示一个进度对话框病设置内容
   * @param message 对话框的内容
   * */
-void showProgressDialog(String message);  
+void showProgressDialog(String message);
 /**
   * 修改当前正在显示的对话框的内容
   * @param message 对话框的内容
   * */
-void setProgressDialogText(String message);  
+void setProgressDialogText(String message);
 /**
   * 关闭正在显示的对话框
   * */
@@ -287,34 +286,34 @@ public class TestActivity extends Activity{
 			int id(){
 				return 1;
 			}
-			
+
 			Object exec(){
 				YSystemNativeV0.callLinuxSleep(3000,null,false,false);
 				return "这是第一个事件";
 			}
-			
+
 		});
 		mLinearActuator.pushBack(new IActuatorRunnable(){
 			int id(){
 				return 2;
 			}
-			
+
 			Object exec(){
 				YSystemNativeV0.callLinuxSleep(3000,null,false,false);
 				return "这是第二个事件";
 			}
-			
+
 		});
 		mLinearActuator.pushBack(new IActuatorRunnable(){
 			int id(){
 				return 3;
 			}
-			
+
 			Object exec(){
 				YSystemNativeV0.callLinuxSleep(3000,null,false,false);
 				return "这是第三个事件";
 			}
-			
+
 		});
 
 		mLinearActuator.setCompleteListener(new IActuatorCompleteListener(){
@@ -339,47 +338,47 @@ onCreate::End
 ```
 LinearActuator 是一个线性的执行器，线性指的是会按顺序投放到线程池中执行事件，但是不不一定谁会先执行完毕，提供的函数如下：
 ```java
-/**  
-  * 向执行器队列中添加一个执行事件  
-  * @param runnable 执行事件  
-  * */  
-void pushBack(IActuatorRunnable runnable);  
-/**  
-  * 获取执行队列的数量  
-  * */  
-int size();  
-/**  
-  * 启动队列  
-  * */  
-void start() throws InterruptedException;  
-/**  
-  * 判断队列是否正在执行  
-  * */  
-boolean canRunning();  
-/**  
-  * 注册队列执行完毕获取所有执行事件返回值的回调接口  
-  * @param completeListener 回调接口  
-  * */  
+/**
+  * 向执行器队列中添加一个执行事件
+  * @param runnable 执行事件
+  * */
+void pushBack(IActuatorRunnable runnable);
+/**
+  * 获取执行队列的数量
+  * */
+int size();
+/**
+  * 启动队列
+  * */
+void start() throws InterruptedException;
+/**
+  * 判断队列是否正在执行
+  * */
+boolean canRunning();
+/**
+  * 注册队列执行完毕获取所有执行事件返回值的回调接口
+  * @param completeListener 回调接口
+  * */
 void setCompleteListener(IActuatorCompleteListener completeListener);
 ```
 其中pushBack向事件队列添加一个事件，这个事件是IActuatorRunnable的实例，定义如下：
 ```java
-/**  
+/**
   * 执行的id
   * */
-int id();  
-/**  
-  * 将要执行的代码写在这个方法中，其中返回值回最终通过{@link IActuatorCompleteListener#complete(List)}这个方法返回  
-  * */  
+int id();
+/**
+  * 将要执行的代码写在这个方法中，其中返回值回最终通过{@link IActuatorCompleteListener#complete(List)}这个方法返回
+  * */
 Object exec();
 ```
 **※值得注意的是，id() 这个方法在同一队列中不能重复，否则可能你会在ActuatorCompleteListener#complete(List)中无法精确找到返回值。**
 如果想要获取执行队列的返回值，可以使用setCompleteListener这个方法设置一个监听器，来获取所有的返回结果，但是要注意，当所有的事件执行完了才会调用这个方法传给你结果，定义如下：
 ```java
-/**  
-  * 当执行器执行队列中的所有事件执行完毕则回将所有的结果传给这个方法  
-  * @param actuatorValues 执行器的返回结果集，可以使用id区分  
-  * */  
+/**
+  * 当执行器执行队列中的所有事件执行完毕则回将所有的结果传给这个方法
+  * @param actuatorValues 执行器的返回结果集，可以使用id区分
+  * */
 void complete(List<ActuatorValue> actuatorValues);
 ```
 你会发现执行结果通过ActuatorValue这个类包装了起来，提供的函数如下：
@@ -702,7 +701,7 @@ public class TestActivity extends YActivity {
   * */
   void makeRequestHeaders(Map<String,String> headers);
 ```
-而预设了两个实现了这个接口的类，例如AbsHttpFormRequestBody封装了请求方式为Form表单的请求方式，AbsHttpJsonRequestBody是传参为Json的方式：
+而预设了两个实现了这个接口的类，例如AbsHttpFormRequestBody封装了请求方式为Form表单的请求方式，AbsHttpJsonRequestBody是传参为Json的方式，**通常你只需要创建这两个类的实例然后重载getRequestURL方法来获取请求地址，重载makeRequestParameter来设置请求参数，重载makeRequestHeader来设置header即可**：
 ``` java
 httpRequestAction.post(new AbsHttpJsonRequestBody(){
 			@Override
@@ -809,5 +808,244 @@ public interface IBufferIOStreamAction {
   boolean writeFile(File file,String data) throws IOException;
 }
 ```
+使用起来也比较简单：
+```java
+public class TestActivity extends YActivity {
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		IBufferIOStreamAction bufferIOStreamAction=BufferIOStreamManager.getBufferIoStreamInterface();
+		try {
+			String text1=bufferIOStreamAction.readFile("/home/yuqianhao/test1.msc");
+			bufferIOStreamAction.writeFile(new File("/home/yuqianhao/test2.msc"),"Hello World!".getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+}
+```
 这些方法在YActivity中有提供。
+### 七、Log：提供了一个全局的Log日志处理器，相对于android.Log拥有更完美的处理方案。
+类YLog提供了这哥功能的所有入口，定义如下：
+```java
+//注册一个全局日志处理器，主要注册了这个处理器，通过YLog打印的所有日志在输出到控制台之后都会发送给这个处理器做最终的处理，可供保存到本地等使用。
+public static void registerLogProcessor(ILogForwarding iLogForwarding);
+//所有的方法的参数一为触发这哥异常的类的实例，删除二为你要打印的消息，参数三是可能会发生的异常
+public static void debug(Object o,String msg);
+public static void warn(Object o,String msg);
+public static void info(Object o,String msg);
+public static void error(Object o,String msg);
+public static void debug(Object o,String msg,Exception e;
+public static void warn(Object o,String msg,Exception e);
+public static void info(Object o,String msg,Exception e);
+public static void error(Object o,String msg,Exception e);
+```
+其中，ILogForwarding的定义如下：
+```java
+/**
+  * 日志处理器，所有使用TLo打印的日志打印完毕后都会最终传到这个方法交给Application处理
+  * @param level Log级别，详见{@link LogLevel}
+  * @param javaClassName 产生日志的类名称
+  * @param logMsg 日志的内容
+  * @param statckMsg 如果调用的YLog的时候同时传递了Exception的时候，Exception的内容会传递给这个参数
+  * */
+void onLogProcessor(int level, Class javaClassName, String logMsg, String statckMsg);
+/**
+  * 设置日志过滤名称，调用YLog的时候打印在LogCat上的过滤名称
+  * @return 日志过滤名称
+  * */
+String onLogCatFilterName();
+/**
+  * 是否需要打印在Logcat中
+  * @return 返回是否打印在Logcat中
+  * */
+boolean canPrintLog();
+/**
+  * 是否将YLog信息传递给onLogProcessor处理
+  * @return
+  * */
+boolean canForwarding();
+```
+举个栗子，在Application中创建一个日志处理器：
+```java
+public class TestApplication extends Application implements ILogForwarding{
+	//可以在这哥日志处理器中处理所有通过YLog打印的日志，依赖于canForwarding的返回值，如果返回true则传递过来处理，否则不处理
+	@Override
+	public void onLogProcessor(int level, Class javaClassName, String logMsg, String statckMsg) {
+		YNative.ubjoinSystemThreadQueue(new Runnable->{
+			IBufferIOStreamAction bufferIOStreamAction=BufferIOStreamManager.getBufferIoStreamInterface();
+			bufferIOStreamAction.writeFile("/data/data/com.yuqianhao.test/logs.log",(javaClassName+"\n"+logMsg+"\n"+statckMsg).getBytes());
+		});
+	}
+
+    //Log日志的过滤名称
+	@Override
+	public String onLogCatFilterName() {
+	    return "com.yuqianhao.test";
+	}
+
+	//是否将日志输出到控制台中，如果为false则日志不会输出
+	@Override
+	public boolean canPrintLog() {
+	    return true;
+	}
+
+    //是否将日志传送给处理函数处理
+	@Override
+	public boolean canForwarding() {
+	    return true;
+	}
+
+	@Override
+	public void onCreate(){
+		YLog.registerLogProcessor(this);
+	}
+}
+```
+如果你的Application继承自YApplication可以无需手动实现这些接口，只需要重载可能会用到的接口函数即可。
+使用起来也简单的很：
+```java
+public class TestActivity extends YActivity {
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		YLog.error(this,"Hello World!");
+    }
+}
+```
+YActivity内部集成了YLog，只要调用log开头的函数即可。
+### 八、Notif：通知用户的捷径，提供了一个Toast的Manager，能够短时间内发送多个Toast并且不会发生内存泄漏以及阻塞，还提供了一个悬挂式的Notify类。
+1、悬挂式Notify类效果如下：
+![](https://github.com/YuQianhao/YQHSupport/blob/master/notify0.png)
+![](https://github.com/YuQianhao/YQHSupport/blob/master/notify1.png)
+可以使用NotifyServiceManager来获取到一个INotifyService的实例，方法定义如下：
+```java
+//获取到一个INotifyService的实例，需要和当前的Activity进行绑定，因为需要用到当前Context的WindowManager
+public static final INotifyService getInstance(Activity activity);
+//获取到一个INotifyService的实例，同时设置一个nMessageNotifyCallback的监听，当通知被回收的时候会调用接口中的方法来告诉你通知已经结束
+public static final INotifyService getInstance(Activity activity,NotifyServiceImplV0.OnMessageNotifyCallback onMessageNotifyCallback);
+//重新绑定一个Activity到INotifyService的实例上
+public static final void setNotifyServiceActivity(INotifyService iNotifyService,Activity activity);
+//清理某一个INotifyService实例上所有的通知，包括在队列中等待显示的
+public static final void clearNotifyStack(INotifyService notifyService);
+```
+INotifyService的定义如下：
+```java
+/**
+  * 显示一个提示的View
+  * @param msg 要显示的内容
+  * @param backgroundColor 提示框的背景颜色
+  * @param textColor 提示框的文字颜色
+  * @param stabarBright 当前状态栏的背景颜色
+  * @param stabarColor 当前状态栏是否为亮色
+  * */
+void showMessageView(String msg,
+						int backgroundColor,
+						boolean setStabarBright,
+						int textColor,
+						int stabarColor,
+						boolean stabarBright);
+```
+NotifyServiceImplV0.OnMessageNotifyCallback的定义如下：
+```java
+//当有通知被关闭的时候都会调用这个方法
+void onMessageNotifyClose();
+```
+通常来说你不需要自己集成这些功能，YActivity已经提供了showSuccressNotifyMsg和showErrorNotifyMsg两个方法来快捷显示通知，同时实现了NotifyServiceImplV0.OnMessageNotifyCallback这个接口，如果你想要监听通知关闭重载onMessageNotifyClose即可：
+```java
+//显示一个背景为绿色的通知
+void showSuccressNotifyMsg(String msg);
+//显示一个背景为红色的通知
+void showErrorNotifyMsg(String msg);
+```
+2、Toast：使用YToast这个管理类可以创建一个Toast并进行展示
+```java
+public static final void showToast(Context context,String msg);
+```
+YActivity已经集成这个方法，直接在Activity中使用showToast这个方法即可，但是**注意，如果你的Application不是继承的YApplication，那么这个方法会使用默认的Toast.makeToast()来创建，如果是则会使用YToast来创建**。
+### 九、DownloadService：下载服务
+下载服务可以使用提供的DownloadServiceManager来创建一个下载任务，提供的方法如下：
+```java
+/**
+  * 创建一个下载任务
+  * @param downloadURL 下载地址
+  * @param downloadFilePath 文件保存路径（需要申请权限）
+  * @param iDownloadListener 下载监听
+  **/
+public static final void startDownloadTask(String downloadURL,
+											String downloadFilePath,
+											IDownloadIntercafe.IDownloadListener iDownloadListener);
+```
+通过这个累的静态方法创建一个下载任务并传入一个下载监听器即可完成下载以及下载任务的进度状态的监听，监听接口定义如下：
+```java
+interface IDownloadListener{
+  /**
+    * 下载过程中会频繁调用此函数来报告进度
+    * @param value 当前已经下载完成的长度
+    * @param maxValue 要下载的文件的总长度
+    * @param proportion 下载完成的进度百分比
+    * */
+  void onProgressNotify(int value, int maxValue, double proportion);
+  /**
+    * 下载过程中被错误中断，如果被错误中断不会调用onComplete方法
+    * @param errorCode 错误编码
+    * */
+  void onError(int errorCode);
+  /**
+    * 下载完成回调接口，注意，如果用户主动取消了下载任务视为下载完成
+    * @param file 下载完成的文件
+    * */
+  void onComplete(File file);
+  /**
+    * 开始下载回调接口
+    * */
+  void onStart();
+}
+```
+### 十、ImageLoaderManager：便捷的图片下载
+通过这个类可以快速的将图片下载到ImageView中，提供的方法如下：
+```java
+//获取一个IImageLoader的接口
+public static final IImageLoader bindImageLoaderService();
+```
+IImageLoader接口定义：
+```java
+//加载图片到ImageView不缓存
+void loadImage(Context context, String url, ImageView imageView);
+//加载图片到ImageView全部缓存
+void loadImageCache(Context context, String url, ImageView imageView);
+void loadImage(Context context, Uri uri, ImageView imageView);
+void loadImageCache(Context context, Uri uri, ImageView imageView);
+```
+YActivity提供了这所有的方法，
+### 十一、ThreadManager：线程池管理
+Support提供了一个ThreadManager来管理和创建线程，例如：
+```java
+/**
+ * 获取多线程接口
+  * @return 多线程接口IThreadAction的实例
+  * */
+public static final IThreadAction getThreadManagerInterface();
+```
+这个接口的定义如下：
+```java
+/**
+  * 将执行器投放到子线程中异步执行
+  * @param runnable 需要投放到子线程中的执行器
+  * */
+void run(Runnable runnable);
+/**
+  * 将执行器投放到主线程中使用
+  * @param runnable 需要投放到子线程中的执行器
+  * */
+void runUI(Runnable runnable);
+
+/**
+  * 同时执行多个子线程，并且在寄主线程等待所有子线程执行完毕
+  * @param runnables 变参，需要并列执行的子线程执行器
+  * */
+void waitThreadList(Runnable ...runnables) throws InterruptedException;
+```
 # 未完待续。。。。。
