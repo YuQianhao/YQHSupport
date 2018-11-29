@@ -3,7 +3,7 @@
 
 ## ·目录·
 ### 一、[Activity](#Activity)：提供了权限申请，Activity返回值，从相册或者本地相机获取图片，加载网络图片，缓存，IO数据，多线程，log等方法集合。
-### 二、[Actuator](#Actuator)：线性的异步执行器，可以线性的执行一大堆事件，然后等待这所有的事件返回并且可以处理所有的返回值。
+### 二、<a href="#Actuator" target="_self">Actuator </a>：线性的异步执行器，可以线性的执行一大堆事件，然后等待这所有的事件返回并且可以处理所有的返回值。
 
 ### <span id="Activity">一、Activity：我好像不用介绍这是什么、、、</span>
 ``` java
