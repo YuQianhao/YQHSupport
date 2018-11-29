@@ -1,8 +1,10 @@
 # YQHSupport
 ### 这是我和我的开发团队正在使用的一套开发框架，能够帮助你快速的构建一个应用而屏蔽了一些复杂的版本实现，目前来说提供了一些Activity，Application，Dialog，Http，IO，Log，Notif，Permissions和Thread，还提供了一些其他的功能，比如Cache，跨进程的Cache等，可以帮你迅速地完成你的任务，就按字典顺序慢慢来吧。。。。。
 
+## ·目录·
+#### 一、[Activity](#Activity)：提供了权限申请，Activity返回值，从相册或者本地相机获取图片，加载网络图片，缓存，IO数据，多线程，log等方法集合。
 
-### 一、Activity：我好像不用介绍这是什么、、、
+### <span id="Activity">一、Activity：我好像不用介绍这是什么、、、</span>
 ``` java
 @StateBar
 public class Activity extends YActivity{
@@ -10,17 +12,17 @@ public class Activity extends YActivity{
 ```
 1、有个@StateBar注解在了这个Activity上，这是这个注解类的源代码：
 ``` java
-@Target(ElementType.TYPE)  
-@Retention(RetentionPolicy.RUNTIME)  
-public @interface StateBar {  
-  /**  
-    * 状态栏的颜色  
-    **/  
-  int color() default 0xffffffff;  
-  /**  
-    * 状态栏字体是否为深色  
-    **/  
-  boolean fontDark() default true;  
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface StateBar {
+  /**
+    * 状态栏的颜色
+    **/
+  int color() default 0xffffffff;
+  /**
+    * 状态栏字体是否为深色
+    **/
+  boolean fontDark() default true;
 }
 ```
 看注释就明白，这个注解的作用就是改变当前Activity的状态栏颜色和字体颜色，默认的就是状态栏为白色，字体为黑色。当然，前提是你得继承YActivity这个类。
@@ -51,7 +53,7 @@ public class TestActivity extends YActivity{
 		//...
 		 startActivityForResult(Intent(this,TestActivity2),STARTCODE_TEXTACTIVITY);
 	}
-	
+
 	@ActivityResultCallback(STARTCODE_TEXTACTIVITY)
 	public void callBackTestMethod(int resuleCode,Intent intent){
 		//在这里面处理Activity返回给你的值
@@ -63,15 +65,15 @@ public class TestActivity extends YActivity{
 2.2、YImageLoadActivity：致力解决从本地相册或者相机获取图片的复杂过程
 从本地相册和照相机获取图片是个复杂而头疼的问题，比如：
 ``` java
-Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);  
-intent.putExtra(MediaStore.EXTRA_OUTPUT,$cameraResultURI);  
+Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+intent.putExtra(MediaStore.EXTRA_OUTPUT,$cameraResultURI);
 startActivityForResult(intent,$REQUEST_CAMERA);
 
 //再比如
 
-Intent intent=new Intent();  
-intent.setAction(Intent.ACTION_GET_CONTENT);  
-intent.setType("image/*");  
+Intent intent=new Intent();
+intent.setAction(Intent.ACTION_GET_CONTENT);
+intent.setType("image/*");
 startActivityForResult(intent, $REQUEST_STORAGE);
 
 //然后监听Activity的返回值，还需要做Uri和String的转换等等。。
@@ -84,10 +86,10 @@ public class TestActivity extends YActivity{
 		//....
 		loadBitmapForCamera();
 	}
-	
+
 	@Override
 	protected void onImageLoadResult(Uri imageUri,String imagePath){
-		
+
 	}
 }
 ```
@@ -99,7 +101,7 @@ public class TestActivity extends YActivity{
 public class TestActivity extends YActivity{
 
 	public static final int REQUEST_PERMISSION_CODE=1;
-	
+
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		//....
@@ -112,129 +114,129 @@ public class TestActivity extends YActivity{
 	}
 
 	@Override
-	protected void onCheckCallPermissionFailure(int callBackMethodID,String[] permissionArray){  
+	protected void onCheckCallPermissionFailure(int callBackMethodID,String[] permissionArray){
 		//当请求的权限被拒绝的时候会传到这个方法里，同时会将你传给checkCallPermission这个方法的参数传给你
 	}
-	
+
 }
 ```
 使用 checkCallPermission 这个方法申请权限，其中参数一是申请的ID，参数二是要申请的权限数组，如果全部申请通过了，会根据参数一指定的ID查找被PermissionsCallback注解修饰的方法，而且注解的值和申请的ID相等的情况下回调用这个方法，如果有任何一个权限被拒绝了都会调用onCheckCallPermissionFailure这个方法并将失败的权限传到参数二中。
 
 2.4、YBaseActivity：这个类实现了IYActivityInterface接口里的所有方法，如下：
 ```java
-/**  
-  * 加载图片到ImageView  
-  * @param url 图片地址路径  
-  * @param imageView 要被加载的ImageView  
+/**
+  * 加载图片到ImageView
+  * @param url 图片地址路径
+  * @param imageView 要被加载的ImageView
   * */
-void loadBitmapToImageView(String url, ImageView imageView);  
-/**  
-  * 加载图片到ImageView  
-  * @param uri 图片uri路径  
-  * @param imageView 要被加载的ImageView  
+void loadBitmapToImageView(String url, ImageView imageView);
+/**
+  * 加载图片到ImageView
+  * @param uri 图片uri路径
+  * @param imageView 要被加载的ImageView
   * */
-void loadBitmapToImageView(Uri uri,ImageView imageView);  
-/**  
-  * 启动一个子线程  
-  * @param runnable 代码执行器  
-  * */  
-void startThread(Runnable runnable);  
-/**  
-  * 启动一个UI线程  
-  * @param runnable 代码执行器  
-  * */  
-void startUIThread(Runnable runnable);  
-/**  
-  * 向进程缓存中添加数据  
-  * @param key 缓存数据的KEY  
-  * @param value 缓存数据的Value  
+void loadBitmapToImageView(Uri uri,ImageView imageView);
+/**
+  * 启动一个子线程
+  * @param runnable 代码执行器
   * */
-void cachePut(String key,String value);  
-/**  
-  * 从进程缓存中读取数据  
-  * @param key 缓存数据的Key  
-  * @return 获取到的缓存内容，如果没有缓存则为null  
+void startThread(Runnable runnable);
+/**
+  * 启动一个UI线程
+  * @param runnable 代码执行器
   * */
-String cacheGet(String key);  
-/**  
-  * 修改进程缓存中的缓存数据  
-  * @param key 要修改的数据的Key  
-  * @param value 要修改的值  
-  * @return 如果修改成功则返回原始的值，否则返回null  
+void startUIThread(Runnable runnable);
+/**
+  * 向进程缓存中添加数据
+  * @param key 缓存数据的KEY
+  * @param value 缓存数据的Value
   * */
-String cacheSet(String key,String value);  
-/**  
-  * 移除进程缓存数据中的值  
-  * @param key 值的Key  
-  * @return 如果进程缓存中有这个值则返回删除了的值，否则返回null  
+void cachePut(String key,String value);
+/**
+  * 从进程缓存中读取数据
+  * @param key 缓存数据的Key
+  * @return 获取到的缓存内容，如果没有缓存则为null
   * */
-String cacheRemove(String key);  
-/**  
-  * 创建一个基础对话框，详见{@link BasisDialog}  
-  * @return 创建好的对话框  
-  * */  
-BasisDialog createBasisDialog();  
-/**  
-  * 创建一个基础对话框，并设置标题，详见{@link BasisDialog}  
-  * @param title 对话框的标题  
-  * @return 创建好的对话框  
-  * */  
-BasisDialog createBasisDialog(String title);  
-/**  
-  * 创建一个基础对话框，并设置标题和消息，详见{@link BasisDialog}  
-  * @param title 对话框的标题  
-  * @param message 对话框的消息内容  
-  * @return 创建好的对话框  
-  * */  
-BasisDialog createBasisDialog(String title,String message);  
-/**  
-  * 展示一个基础对话框并设置消息，通常用作给用户一个简单的提示，这个对话框会带有  
-  * 一个Ok按钮，即关闭按钮，详见{@link BasisDialog}  
-  * @param message 要显示的消息  
-  * */  
-void showBasisMessageDialog(String message);  
-/**  
-  * 创建一个选择对话框，同时设置对话框的标题和内容，详见{@link SelectDialog}  
-  * @param title 对话框标题  
-  * @param item 变参，对话框的值列表  
-  * @return 返回创建好的对话框  
-  * */  
-SelectDialog createSelectDialog(String title,String ...item);  
-/**  
-  * 创建一个post请求，详见{@link com.yuqianhao.support.http.IHttpRequestAction}  
-  * @param requestBody 请求参数  
-  * @param RequestResponse 请求结果  
-  * */  
-void post(IHttpRequestBody requestBody, IHttpRequestResponse RequestResponse);  
-/**  
-  * 创建一个get请求，详见{@link com.yuqianhao.support.http.IHttpRequestAction}  
-  * @param requestBody 请求参数  
-  * @param RequestResponse 请求结果  
-  * */  
-void get(IHttpRequestBody requestBody,IHttpRequestResponse RequestResponse);  
-/**  
-  * 将数据写出到文件  
-  * @param path 要写出的文件路径  
-  * @param data 要写出的数据  
-  * */  
-void writeData(String path,String data) throws IOException;  
-/**  
-  * 从文件中读取数据  
-  * @param path 文件的路径  
-  * @return 读取到的数据  
-  * */  
-String readData(String path) throws IOException;  
+String cacheGet(String key);
+/**
+  * 修改进程缓存中的缓存数据
+  * @param key 要修改的数据的Key
+  * @param value 要修改的值
+  * @return 如果修改成功则返回原始的值，否则返回null
+  * */
+String cacheSet(String key,String value);
+/**
+  * 移除进程缓存数据中的值
+  * @param key 值的Key
+  * @return 如果进程缓存中有这个值则返回删除了的值，否则返回null
+  * */
+String cacheRemove(String key);
+/**
+  * 创建一个基础对话框，详见{@link BasisDialog}
+  * @return 创建好的对话框
+  * */
+BasisDialog createBasisDialog();
+/**
+  * 创建一个基础对话框，并设置标题，详见{@link BasisDialog}
+  * @param title 对话框的标题
+  * @return 创建好的对话框
+  * */
+BasisDialog createBasisDialog(String title);
+/**
+  * 创建一个基础对话框，并设置标题和消息，详见{@link BasisDialog}
+  * @param title 对话框的标题
+  * @param message 对话框的消息内容
+  * @return 创建好的对话框
+  * */
+BasisDialog createBasisDialog(String title,String message);
+/**
+  * 展示一个基础对话框并设置消息，通常用作给用户一个简单的提示，这个对话框会带有
+  * 一个Ok按钮，即关闭按钮，详见{@link BasisDialog}
+  * @param message 要显示的消息
+  * */
+void showBasisMessageDialog(String message);
+/**
+  * 创建一个选择对话框，同时设置对话框的标题和内容，详见{@link SelectDialog}
+  * @param title 对话框标题
+  * @param item 变参，对话框的值列表
+  * @return 返回创建好的对话框
+  * */
+SelectDialog createSelectDialog(String title,String ...item);
+/**
+  * 创建一个post请求，详见{@link com.yuqianhao.support.http.IHttpRequestAction}
+  * @param requestBody 请求参数
+  * @param RequestResponse 请求结果
+  * */
+void post(IHttpRequestBody requestBody, IHttpRequestResponse RequestResponse);
+/**
+  * 创建一个get请求，详见{@link com.yuqianhao.support.http.IHttpRequestAction}
+  * @param requestBody 请求参数
+  * @param RequestResponse 请求结果
+  * */
+void get(IHttpRequestBody requestBody,IHttpRequestResponse RequestResponse);
+/**
+  * 将数据写出到文件
+  * @param path 要写出的文件路径
+  * @param data 要写出的数据
+  * */
+void writeData(String path,String data) throws IOException;
+/**
+  * 从文件中读取数据
+  * @param path 文件的路径
+  * @return 读取到的数据
+  * */
+String readData(String path) throws IOException;
 /**
   * 这一组是Log相关的，会在Log处介绍。
   * */
-void logDebug(String msg);  
-void logWarn(String msg);  
-void logInfo(String msg);  
-void logError(String msg);  
-void logDebug(String msg, Exception e);  
-void logWarn(String msg, Exception e);  
-void logInfo(String msg, Exception e);  
-void logError(String msg, Exception e);  
+void logDebug(String msg);
+void logWarn(String msg);
+void logInfo(String msg);
+void logError(String msg);
+void logDebug(String msg, Exception e);
+void logWarn(String msg, Exception e);
+void logInfo(String msg, Exception e);
+void logError(String msg, Exception e);
 /**
  * 显示一个Toast通知框，注意，如果Application不是YApplication的子类这个方法会使用Toast.make来创建，不会使用YToast
  * */
@@ -274,7 +276,7 @@ void setProgressDialogText(String message);
   * */
 void closeProgressDialog();
 ```
-### 二、Actuator：这是一个线性的异步执行器，可以线性的执行一大堆事件，然后等待这所有的事件返回并且可以处理所有的返回值。
+### <span id="Actuator">二、Actuator：这是一个线性的异步执行器，可以线性的执行一大堆事件，然后等待这所有的事件返回并且可以处理所有的返回值。</span>
 直接上代码：
 ```java
 public class TestActivity extends Activity{
@@ -394,7 +396,7 @@ public Object getValue();
 public <_Tx> _Tx castValue();
 ```
 每一个IActuatorRunnable独享一个子线程，主线程等待这所有的事件执行完毕后继续执行。如果不想在主线程中等待就可以在子线程中start这个事件队列。
-### 三、YApplication
+### 三、<span id="YApplication">YApplication</span>
 YApplication实现了Thread.UncaughtExceptionHandler和ILogForwarding这两个接口，其中最后一个接口是全局的Log捕获接口，会在YLog处介绍，同时提供了一下几个方法可供重载：
 ```java
 //是否将全局RuntimeException异常处理器交给Application，如果返回true则所有的RuntimeException都会转交给uncaughtException这个方法处理，同时不会再出现那个“停止运行”的小框框。
@@ -424,7 +426,7 @@ public boolean canPrintLog(){}
 //默认为true
 public boolean canForwarding()
 ```
-### 四、Cache：这个里面提供了一个单进程缓存框架，跨进程缓存框架，还有JSON反序列化对象的工具类。
+### 四、<span id="Cache">Cache：这个里面提供了一个单进程缓存框架，跨进程缓存框架，还有JSON反序列化对象的工具类。</span>
 这个缓存部分主要提供了以下几个类：
 ```java
 1、CacheHelpManager		：单进程Cache的接口管理类
@@ -552,7 +554,7 @@ SharedStorgeManager还提供了额外的方法，例如：
 }
 ```
 **我建议使用 SharedStorgeManager 提供的解决方案，因为效率相对于CacheHelpManager有很大的提升。CacheHelpManager是V0提供的，没删除，有老项目在沿用。。**
-### 五、Dialog：提供了一些基本的可拓展的对话框，例如BasisDialog，SelectDialog，UpdateDialog。
+### 五、<span id="Dialog">Dialog：提供了一些基本的可拓展的对话框，例如BasisDialog，SelectDialog，UpdateDialog。</span>
 ``` java
 BasisDialog		:基本消息对话框
 SelectDialog	:选择对话框
@@ -624,7 +626,7 @@ public interface OnSelectDialogListener{
 }
 ```
 BasisDialog和SelectDialog在YActivity的IYActivityInterface的接口都有提供。可以直接在YActivity中调用showBasisMessageDialog等方法直接创建BasisDialog等。
-### 六、Http：网络请求框架，封装了OkHttp并实现了Get和Post两种请求方式，所有的请求方式都以接口形式提供，可以进行拓展使用。
+### 六、<span id="Http">Http：网络请求框架，封装了OkHttp并实现了Get和Post两种请求方式，所有的请求方式都以接口形式提供，可以进行拓展使用。</span>
 可以通过HttpRequestManager这个类获取到IHttpRequestAction这个接口的实例，例如：
 ``` java
 public static void main(String[] args){
@@ -762,7 +764,7 @@ public interface IHttpRequestResponse {
   * */
   protected void onResult(int code,String body,Exception e){}
 ```
-### 六、IO：提供了一个IO流的工具类BufferIOStreamManager
+### 六、<span id="IO">IO：提供了一个IO流的工具类BufferIOStreamManager</span>
 可以使用BufferIOStreamManager获取到一个实现了IBufferIOStreamAction接口的实例，接口定义如下：
 ``` java
 public interface IBufferIOStreamAction {
@@ -826,7 +828,7 @@ public class TestActivity extends YActivity {
 }
 ```
 这些方法在YActivity中有提供。
-### 七、Log：提供了一个全局的Log日志处理器，相对于android.Log拥有更完美的处理方案。
+### <span id="Log">七、Log：提供了一个全局的Log日志处理器，相对于android.Log拥有更完美的处理方案。</span>
 类YLog提供了这哥功能的所有入口，定义如下：
 ```java
 //注册一个全局日志处理器，主要注册了这个处理器，通过YLog打印的所有日志在输出到控制台之后都会发送给这个处理器做最终的处理，可供保存到本地等使用。
@@ -916,7 +918,7 @@ public class TestActivity extends YActivity {
 }
 ```
 YActivity内部集成了YLog，只要调用log开头的函数即可。
-### 八、Notif：通知用户的捷径，提供了一个Toast的Manager，能够短时间内发送多个Toast并且不会发生内存泄漏以及阻塞，还提供了一个悬挂式的Notify类。
+### 八、<span id="Notif">Notif：通知用户的捷径，提供了一个Toast的Manager，能够短时间内发送多个Toast并且不会发生内存泄漏以及阻塞，还提供了一个悬挂式的Notify类。</span>
 1、悬挂式Notify类效果如下：
 ![](https://github.com/YuQianhao/YQHSupport/blob/master/notify0.png)
 ![](https://github.com/YuQianhao/YQHSupport/blob/master/notify1.png)
@@ -965,7 +967,7 @@ void showErrorNotifyMsg(String msg);
 public static final void showToast(Context context,String msg);
 ```
 YActivity已经集成这个方法，直接在Activity中使用showToast这个方法即可，但是**注意，如果你的Application不是继承的YApplication，那么这个方法会使用默认的Toast.makeToast()来创建，如果是则会使用YToast来创建**。
-### 九、DownloadService：下载服务
+### 九、<span id="DownloadService">DownloadService：下载服务</span>
 下载服务可以使用提供的DownloadServiceManager来创建一个下载任务，提供的方法如下：
 ```java
 /**
@@ -1004,7 +1006,7 @@ interface IDownloadListener{
   void onStart();
 }
 ```
-### 十、ImageLoaderManager：便捷的图片下载
+### 十、<span id="ImageLoaderManager">ImageLoaderManager：便捷的图片下载</span>
 通过这个类可以快速的将图片下载到ImageView中，提供的方法如下：
 ```java
 //获取一个IImageLoader的接口
@@ -1020,7 +1022,7 @@ void loadImage(Context context, Uri uri, ImageView imageView);
 void loadImageCache(Context context, Uri uri, ImageView imageView);
 ```
 YActivity提供了这所有的方法，
-### 十一、ThreadManager：线程池管理
+### 十一、<span id="ThreadManager">ThreadManager：线程池管理</span>
 Support提供了一个ThreadManager来管理和创建线程，例如：
 ```java
 /**
