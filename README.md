@@ -2,7 +2,8 @@
 ### 这是我和我的开发团队正在使用的一套开发框架，能够帮助你快速的构建一个应用而屏蔽了一些复杂的版本实现，目前来说提供了一些Activity，Application，Dialog，Http，IO，Log，Notif，Permissions和Thread，还提供了一些其他的功能，比如Cache，跨进程的Cache等，可以帮你迅速地完成你的任务，就按字典顺序慢慢来吧。。。。。
 
 ## ·目录·
-#### 一、[Activity](#Activity)：提供了权限申请，Activity返回值，从相册或者本地相机获取图片，加载网络图片，缓存，IO数据，多线程，log等方法集合。
+### 一、[Activity](#Activity)：提供了权限申请，Activity返回值，从相册或者本地相机获取图片，加载网络图片，缓存，IO数据，多线程，log等方法集合。
+### 二、[Actuator](#Actuator)：线性的异步执行器，可以线性的执行一大堆事件，然后等待这所有的事件返回并且可以处理所有的返回值。
 
 ### <span id="Activity">一、Activity：我好像不用介绍这是什么、、、</span>
 ``` java
