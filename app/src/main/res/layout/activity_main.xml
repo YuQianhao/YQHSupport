@@ -2,10 +2,12 @@
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".MainActivity">
-
-    <SurfaceView
-            android:layout_width="12dp"
-            android:layout_height="10dp" tools:layout_editor_absoluteY="45dp"
-            tools:layout_editor_absoluteX="88dp" android:id="@+id/surfaceView" tools:ignore="MissingConstraints"/>
+        tools:context=".MainActivity"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" tools:layout_editor_absoluteY="128dp"
+            tools:layout_editor_absoluteX="145dp" android:id="@+id/textView"/>
 </android.support.constraint.ConstraintLayout>
