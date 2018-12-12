@@ -2,6 +2,43 @@
 # YQHSupport
 ### 这是一个能够帮助你快速的构建一个应用而屏蔽了一些复杂的版本实现，目前来说提供了一些Activity，Application，Dialog，Http，IO，Log，Notif，Permissions和Thread，还提供了一些其他的功能，比如进程共享的的Cache，异步事件处理Actuator等，可以帮你迅速地完成你的任务。
 
+## ·依赖·
+[![](https://jitpack.io/v/YuQianhao/YQHSupport.svg)](https://jitpack.io/#YuQianhao/YQHSupport)
+### Gradle：
+1、将这个依赖结构添加到项目根目录的build.gradle中。
+``` java
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+2、将这个依赖命令添加到app或者需要依赖这个library的build.gradle中。
+```java
+	dependencies {
+	        implementation 'com.github.YuQianhao:YQHSupport:0.0.3'
+	}
+```
+### Maven：
+1、将JitPack存储库添加到构建文件中。
+``` java
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+```
+2、添加到依赖中。
+```java
+	<dependency>
+	    <groupId>com.github.YuQianhao</groupId>
+	    <artifactId>YQHSupport</artifactId>
+	    <version>0.0.3</version>
+	</dependency>
+
+```
 ## ·目录·
 ### 一、[Activity](#Activity)：提供了权限申请，Activity返回数据传递，从相册或者本地相机获取图片，加载网络图片，缓存，IO数据，多线程，log等方法集合。
 ### 二、[Actuator](#Actuator)：线性的异步执行器，可以线性的执行大量事件，可以等待这所有的事件返回并且可以处理所有的返回值。
