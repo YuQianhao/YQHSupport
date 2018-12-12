@@ -1,11 +1,22 @@
+
 # YQHSupport
-### 这是我和我的开发团队正在使用的一套开发框架，能够帮助你快速的构建一个应用而屏蔽了一些复杂的版本实现，目前来说提供了一些Activity，Application，Dialog，Http，IO，Log，Notif，Permissions和Thread，还提供了一些其他的功能，比如Cache，跨进程的Cache等，可以帮你迅速地完成你的任务，就按字典顺序慢慢来吧。。。。。
+### 这是一个能够帮助你快速的构建一个应用而屏蔽了一些复杂的版本实现，目前来说提供了一些Activity，Application，Dialog，Http，IO，Log，Notif，Permissions和Thread，还提供了一些其他的功能，比如进程共享的的Cache，异步事件处理Actuator等，可以帮你迅速地完成你的任务。
 
 ## ·目录·
-### 一、[Activity](#Activity)：提供了权限申请，Activity返回值，从相册或者本地相机获取图片，加载网络图片，缓存，IO数据，多线程，log等方法集合。
-### 二、<a href="#Actuator" target="_self">Actuator </a>：线性的异步执行器，可以线性的执行一大堆事件，然后等待这所有的事件返回并且可以处理所有的返回值。
+### 一、[Activity](#Activity)：提供了权限申请，Activity返回数据传递，从相册或者本地相机获取图片，加载网络图片，缓存，IO数据，多线程，log等方法集合。
+### 二、[Actuator](#Actuator)：线性的异步执行器，可以线性的执行大量事件，可以等待这所有的事件返回并且可以处理所有的返回值。
+### 三、[YApplication](#YApplication)：应用框架依赖的Application，这个Application能够区分进程并且实现了Thread.UncaughtExceptionHandler等接口。
+### 四、[Cache](#Cache)：这个里面提供了一个单进程缓存框架，跨进程缓存框架，还有JSON反序列化对象的工具类。
+### 五、[Dialog](#Dialog)：提供了一些基本的可拓展的对话框，例如BasisDialog，SelectDialog，UpdateDialog。
+### 六、[Http](#Http)：网络请求框架，封装了OkHttp并实现了Get和Post两种请求方式，所有的请求方式都以接口形式提供，可以进行拓展使用。
+### 七、[IO](#IO)：提供了一个IO流的工具类BufferIOStreamManager，可以快速的读取文件和写入文件。
+### 八、[Log](#Log)：提供了一个全局的Log日志处理器，相对于android.Log拥有更完美的处理方案。
+### 九、[Notif](#Notif)：通知用户的捷径，提供了一个Toast的Manager，能够短时间内发送多个Toast并且不会发生内存泄漏以及阻塞，还提供了一个悬挂式的Notify类。
+### 十、[DownloadService](#DownloadService)：下载服务
+### 十一、[ImageLoaderManager](#ImageLoaderManager)：图片加载框架
+### 十二、[ThreadManager](#ThreadManager)：线程池管理
 
-### <span id="Activity">一、Activity：我好像不用介绍这是什么、、、</span>
+### <span id="Activity">一、Activity：</span>
 ``` java
 @StateBar
 public class Activity extends YActivity{
@@ -42,7 +53,7 @@ YActivityResultActivity		//这个类封装了Activity返回到上一个Activity�
 		  ↓
    AppCompatActivity
 ```
-2.1、YActivityResultActivity：致力解决Activity返回值问题
+2.1、YActivityResultActivity：优化Activity返回值传递的复杂度
 通常我们使用 startActivityForResult 等方法启动一个Activity肯定会期待他带回来一个返回值给我用。。。一般的做法是重写 onActivityResult 来判断很多参数，如果期待的多了。。肯定会乱，这个类封装这个方法改为使用注解修饰方法的方式来调用，比如：
 ``` java
 public class TestActivity extends YActivity{
@@ -63,7 +74,7 @@ public class TestActivity extends YActivity{
 ```
 使用注解 ActivityResultCallback 来修饰一个方法，其中注解的参数就是Activity的StartCode，**修饰的方法必须接受int和Intent这两个参数**。
 
-2.2、YImageLoadActivity：致力解决从本地相册或者相机获取图片的复杂过程
+2.2、YImageLoadActivity：简化从本地相册或者相机获取图片的复杂过程
 从本地相册和照相机获取图片是个复杂而头疼的问题，比如：
 ``` java
 Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -96,7 +107,7 @@ public class TestActivity extends YActivity{
 ```
 重载 onImageLoadResult 这个方法，当调用 loadBitmapForCamera / loadBitmapForStorage 时会将你选择的或者拍摄的图片的Uri和StringPath传递给这个方法。
 
-2.3、YPermissionActivity：致力解决于权限调用起来混乱的类
+2.3、YPermissionActivity：简化权限申请
 惯例，在Android6.0+(23+)中加入了动态权限，调用的时候需要判断版本号，然后使用ContextCompat等等很多方法申请权限，然后在重载onRequestPermissionsResult这个方法去判断，过程比较复杂，稍有不慎就会发生很多问题。。。而YActivity解决了这个问题，例如：
 ```java
 public class TestActivity extends YActivity{
@@ -765,7 +776,7 @@ public interface IHttpRequestResponse {
   * */
   protected void onResult(int code,String body,Exception e){}
 ```
-### 六、<span id="IO">IO：提供了一个IO流的工具类BufferIOStreamManager</span>
+### 七、<span id="IO">IO：提供了一个IO流的工具类BufferIOStreamManager</span>
 可以使用BufferIOStreamManager获取到一个实现了IBufferIOStreamAction接口的实例，接口定义如下：
 ``` java
 public interface IBufferIOStreamAction {
@@ -829,7 +840,7 @@ public class TestActivity extends YActivity {
 }
 ```
 这些方法在YActivity中有提供。
-### <span id="Log">七、Log：提供了一个全局的Log日志处理器，相对于android.Log拥有更完美的处理方案。</span>
+### <span id="Log">八、Log：提供了一个全局的Log日志处理器，相对于android.Log拥有更完美的处理方案。</span>
 类YLog提供了这哥功能的所有入口，定义如下：
 ```java
 //注册一个全局日志处理器，主要注册了这个处理器，通过YLog打印的所有日志在输出到控制台之后都会发送给这个处理器做最终的处理，可供保存到本地等使用。
@@ -919,7 +930,7 @@ public class TestActivity extends YActivity {
 }
 ```
 YActivity内部集成了YLog，只要调用log开头的函数即可。
-### 八、<span id="Notif">Notif：通知用户的捷径，提供了一个Toast的Manager，能够短时间内发送多个Toast并且不会发生内存泄漏以及阻塞，还提供了一个悬挂式的Notify类。</span>
+### 九、<span id="Notif">Notif：通知用户的捷径，提供了一个Toast的Manager，能够短时间内发送多个Toast并且不会发生内存泄漏以及阻塞，还提供了一个悬挂式的Notify类。</span>
 1、悬挂式Notify类效果如下：
 ![](https://github.com/YuQianhao/YQHSupport/blob/master/notify0.png)
 ![](https://github.com/YuQianhao/YQHSupport/blob/master/notify1.png)
@@ -968,7 +979,7 @@ void showErrorNotifyMsg(String msg);
 public static final void showToast(Context context,String msg);
 ```
 YActivity已经集成这个方法，直接在Activity中使用showToast这个方法即可，但是**注意，如果你的Application不是继承的YApplication，那么这个方法会使用默认的Toast.makeToast()来创建，如果是则会使用YToast来创建**。
-### 九、<span id="DownloadService">DownloadService：下载服务</span>
+### 十、<span id="DownloadService">DownloadService：下载服务</span>
 下载服务可以使用提供的DownloadServiceManager来创建一个下载任务，提供的方法如下：
 ```java
 /**
@@ -1007,7 +1018,7 @@ interface IDownloadListener{
   void onStart();
 }
 ```
-### 十、<span id="ImageLoaderManager">ImageLoaderManager：便捷的图片下载</span>
+### 十一、<span id="ImageLoaderManager">ImageLoaderManager：图片加载框架</span>
 通过这个类可以快速的将图片下载到ImageView中，提供的方法如下：
 ```java
 //获取一个IImageLoader的接口
@@ -1023,7 +1034,7 @@ void loadImage(Context context, Uri uri, ImageView imageView);
 void loadImageCache(Context context, Uri uri, ImageView imageView);
 ```
 YActivity提供了这所有的方法，
-### 十一、<span id="ThreadManager">ThreadManager：线程池管理</span>
+### 十二、<span id="ThreadManager">ThreadManager：线程池管理</span>
 Support提供了一个ThreadManager来管理和创建线程，例如：
 ```java
 /**
@@ -1051,4 +1062,4 @@ void runUI(Runnable runnable);
   * */
 void waitThreadList(Runnable ...runnables) throws InterruptedException;
 ```
-# 未完待续。。。。。
+# END~ Thank You!
