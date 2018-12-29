@@ -1,6 +1,8 @@
 
+
 # YQHSupport
 ### 这是一个能够帮助你快速的构建一个应用而屏蔽了一些复杂的版本实现，目前来说提供了一些Activity，Application，Dialog，Http，IO，Log，Notif，Permissions和Thread，还提供了一些其他的功能，比如进程共享的的Cache，异步事件处理Actuator等，可以帮你迅速地完成你的任务。
+
 
 ## ·依赖·
 [![](https://jitpack.io/v/YuQianhao/YQHSupport.svg)](https://jitpack.io/#YuQianhao/YQHSupport)
@@ -17,7 +19,7 @@
 2、将这个依赖命令添加到app或者需要依赖这个library的build.gradle中。
 ```java
 	dependencies {
-	        implementation 'com.github.YuQianhao:YQHSupport:0.0.3'
+	        implementation 'com.github.YuQianhao:YQHSupport:0.0.4'
 	}
 ```
 ### Maven：
@@ -35,7 +37,7 @@
 	<dependency>
 	    <groupId>com.github.YuQianhao</groupId>
 	    <artifactId>YQHSupport</artifactId>
-	    <version>0.0.3</version>
+	    <version>0.0.4</version>
 	</dependency>
 
 ```
@@ -52,6 +54,7 @@
 ### 十、[DownloadService](#DownloadService)：下载服务
 ### 十一、[ImageLoaderManager](#ImageLoaderManager)：图片加载框架
 ### 十二、[ThreadManager](#ThreadManager)：线程池管理
+### 十三、[BitmapBlur](#BitmapBlur)：图片高斯模糊方案
 
 ### <span id="Activity">一、Activity：</span>
 ``` java
@@ -1098,5 +1101,32 @@ void runUI(Runnable runnable);
   * @param runnables 变参，需要并列执行的子线程执行器
   * */
 void waitThreadList(Runnable ...runnables) throws InterruptedException;
+```
+### 十三、<span id="BitmapBlur">BitmapBlur：Bitmap高斯模糊</span>
+Support提供了一个处理Bitmap为高斯模糊的高兴能解决方案，定义了接口
+``` java
+public interface IBitmapBlurAction {
+	/**
+	  * @parmas context
+	  * @params bitmap Bitmap源
+	  * @params scale 源图片的缩放比例，取值为0.0-1.0，高性能的高斯模糊方案首先是将图片进行缩小，然后进行像素点的高斯模糊处理，处理完成后将图片缩放回原来的尺寸。
+	  * @params radius 模糊的值，取值为0-25，值越大越模糊
+	  * @return 返回处理完成的Bitmap
+	  */
+	Bitmap blur(Context context,
+				Bitmap bitmap,
+				@FloatRange(from = 0,to = 1) float scale,
+				@IntRange(from = 0, to = 25) int radius);
+}
+```
+通过BitmapBlurManager的getBitmapBlurAction()方法可以获取到这个接口的实例，但是同时也提供了两个便捷的方法blur。
+``` java
+public class TextApplication{
+	public static void main(String[] args){
+		Bitmap bitmap=BitmapBlurManager.blur(YRuntime.getApplication().getContext(),YResource.getMipmap(R.mipmap.ic_test));
+		ImageView imageView=new ImageView(YRuntime.getApplication().getContext());
+		imageView.setImageBitmap(bitmap);
+	}
+}
 ```
 # END~ Thank You!
