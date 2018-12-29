@@ -10,7 +10,7 @@ import okhttp3.RequestBody;
 /**
  * 请求参数接口的实现类，这个类包装了请求参数为Json类型的请求体。
  * */
-public class AbsHttpJsonRequestBody implements IHttpRequestBody{
+public class AbsHttpJsonRequestBody extends RequestParamsBuilder implements IHttpRequestBody{
     private JSONObject jsonObject;
 
     public AbsHttpJsonRequestBody(){
