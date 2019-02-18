@@ -59,7 +59,7 @@ public class MessageManager {
 
     public void sendMessage(int type,Object data){
         Message message=new Message();
-        message.data=null;
+        message.data=data;
         message.type=type;
         sendMessage(message);
     }
