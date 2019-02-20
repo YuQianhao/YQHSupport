@@ -57,6 +57,12 @@ public class MessageManager {
         sendMessage(type,null);
     }
 
+    public void sendMessage(int ...type){
+        for(int tmp:type){
+            sendMessage(tmp);
+        }
+    }
+
     public void sendMessage(int type,Object data){
         Message message=new Message();
         message.data=data;
