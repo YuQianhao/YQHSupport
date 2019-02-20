@@ -49,7 +49,7 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CACHE_ACTION= CacheHelpManager.bindCacheHelperService(this);
+        CACHE_ACTION= CacheHelpManager.bindCacheHelperService();
         StateBar stateBar=getClass().getAnnotation(StateBar.class);
         if(stateBar!=null){
             __$$stateBarColor=stateBar.color();
