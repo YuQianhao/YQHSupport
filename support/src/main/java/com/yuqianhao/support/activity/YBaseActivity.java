@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.githang.statusbar.StatusBarCompat;
 import com.yuqianhao.support.application.YApplication;
 import com.yuqianhao.support.cache.CacheHelpManager;
@@ -49,7 +50,11 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CACHE_ACTION= CacheHelpManager.bindCacheHelperService();
+        if(!(getApplication() instanceof YApplication)){
+            CACHE_ACTION=CacheHelpManager.bindCacheHelperServiceV0(this);
+        }else{
+            CACHE_ACTION= CacheHelpManager.bindCacheHelperService();
+        }
         StateBar stateBar=getClass().getAnnotation(StateBar.class);
         if(stateBar!=null){
             __$$stateBarColor=stateBar.color();
