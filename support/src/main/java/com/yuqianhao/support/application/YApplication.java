@@ -2,10 +2,8 @@ package com.yuqianhao.support.application;
 
 import android.app.ActivityManager;
 import android.app.Application;
-
+import com.tencent.mmkv.MMKV;
 import com.yuqianhao.support.log.ILogForwarding;
-import com.yuqianhao.support.notif.IToast;
-import com.yuqianhao.support.notif.ToastImpl;
 import com.yuqianhao.support.notif.YToast;
 
 import java.util.List;
@@ -14,7 +12,7 @@ public class YApplication extends Application implements Thread.UncaughtExceptio
 
     private static YApplication application=null;
 
-    private final String PACKAGENAME=getPackageName();
+    private String PACKAGENAME;
 
 
 
@@ -25,6 +23,8 @@ public class YApplication extends Application implements Thread.UncaughtExceptio
     @Override
     public void onCreate() {
         super.onCreate();
+        PACKAGENAME=getPackageName();
+        MMKV.initialize(this);
         if(canOpenSetDefaultUncaughtExceptionHandler()){
             Thread.setDefaultUncaughtExceptionHandler(this);
         }

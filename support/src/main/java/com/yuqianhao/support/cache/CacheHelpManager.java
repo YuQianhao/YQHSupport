@@ -1,6 +1,5 @@
 package com.yuqianhao.support.cache;
 
-import android.content.Context;
 import com.yuqianhao.support.cache.V2.MMKV_CacheWriteImpl;
 
 public class CacheHelpManager {
