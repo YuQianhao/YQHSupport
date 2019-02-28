@@ -27,22 +27,22 @@ public class YImageLoader implements IImageLoader{
 
     @Override
     public void loadImage(Context context, String url, ImageView imageView) {
-        Glide.with(context).load(url).apply(REQUEST_OPTIONS).into(imageView);
+        Glide.with(context.getApplicationContext()).load(url).apply(REQUEST_OPTIONS).into(imageView);
     }
 
     @Override
     public void loadImageCache(Context context, String url, ImageView imageView) {
-        Glide.with(context).load(url).apply(REQUEST_OPTIONS_CACHE).into(imageView);
+        Glide.with(context.getApplicationContext()).load(url).apply(REQUEST_OPTIONS_CACHE).into(imageView);
     }
 
     @Override
     public void loadImage(Context context, Uri uri, ImageView imageView) {
-        Glide.with(context).load(uri).apply(REQUEST_OPTIONS).into(imageView);
+        Glide.with(context.getApplicationContext()).load(uri).apply(REQUEST_OPTIONS).into(imageView);
     }
 
     @Override
     public void loadImageCache(Context context, Uri uri, ImageView imageView) {
-        Glide.with(context).load(uri).apply(REQUEST_OPTIONS_CACHE).into(imageView);
+        Glide.with(context.getApplicationContext()).load(uri).apply(REQUEST_OPTIONS_CACHE).into(imageView);
     }
 
 

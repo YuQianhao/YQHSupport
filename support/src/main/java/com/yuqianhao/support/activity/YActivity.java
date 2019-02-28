@@ -7,8 +7,4 @@ package com.yuqianhao.support.activity;
  * {@link YImageLoadActivity}
  * {@link YActivityResultActivity}
  * */
-public class YActivity extends YActivityResultActivity{
-
-
-
-}
+public class YActivity extends YActivityResultActivity{}
