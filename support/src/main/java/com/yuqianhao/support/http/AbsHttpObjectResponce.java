@@ -15,12 +15,12 @@ public class AbsHttpObjectResponce<_Tx> extends AbsHttpJsonRequestResponse{
     }
 
     @Override
-    protected void onUIResult(int code, JSONObject body, Exception e) {
+    protected final void onUIResult(int code, JSONObject body, Exception e) {
         onUIResult(code,(_Tx) GSON_INSTANCE.fromJson(body.toString(),getType()),e);
     }
 
     @Override
-    protected void onResult(int code, JSONObject body, Exception e) {
+    protected final void onResult(int code, JSONObject body, Exception e) {
         onResult(code,(_Tx) GSON_INSTANCE.fromJson(body.toString(),getType()),e);
     }
 
