@@ -30,7 +30,7 @@ public class AbsHttpJsonRequestBody extends RequestParamsBuilder implements IHtt
 
     @Override
     public final void makeRequestHeaders(Map<String, String> headers) {
-        makeRequestHeaders(headers);
+        makeRequestHeader(headers);
     }
 
     /**
