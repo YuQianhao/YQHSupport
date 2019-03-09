@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -32,48 +33,53 @@ import com.yuqianhao.support.service.image.ImageLoaderManager;
 import com.yuqianhao.support.thread.IThreadAction;
 import com.yuqianhao.support.thread.ThreadManager;
 
+import java.io.File;
 import java.io.IOException;
 
 public class YBaseActivity extends AppCompatActivity implements IYActivityInterface,
-        NotifyServiceImplV0.OnMessageNotifyCallback{
-    private static final IImageLoader IMAGE_LOADER= ImageLoaderManager.bindImageLoaderService();
-    private static final IThreadAction THREAD_ACTION= ThreadManager.getThreadManagerInterface();
+        NotifyServiceImplV0.OnMessageNotifyCallback {
+    private static final IImageLoader IMAGE_LOADER = ImageLoaderManager.bindImageLoaderService();
+    private static final IThreadAction THREAD_ACTION = ThreadManager.getThreadManagerInterface();
     private ICacheAction<String> CACHE_ACTION;
-    private static final IHttpRequestAction HTTP_REQUEST_ACTION= HttpRequestManager.getHttpRequestInterface();
-    private static final IBufferIOStreamAction BUFFER_IO_STREAM_ACTION= BufferIOStreamManager.getBufferIoStreamInterface();
-    private final INotifyService notifyService= NotifyServiceManager.getInstance(this,this);
-    private ProgressDialog progressDialog=null;
 
-    protected int __$$stateBarColor=0xffffffff;
+
+    private static final IHttpRequestAction HTTP_REQUEST_ACTION = HttpRequestManager.getHttpRequestInterface();
+    private static final IBufferIOStreamAction BUFFER_IO_STREAM_ACTION = BufferIOStreamManager.getBufferIoStreamInterface();
+    private final INotifyService notifyService = NotifyServiceManager.getInstance(this, this);
+    private ProgressDialog progressDialog = null;
+
+    protected int __$$stateBarColor = 0xffffffff;
 
     @CallSuper
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(!(getApplication() instanceof YApplication)){
-            CACHE_ACTION=CacheHelpManager.bindCacheHelperServiceV0(this);
-        }else{
-            CACHE_ACTION= CacheHelpManager.bindCacheHelperService();
+        if (!(getApplication() instanceof YApplication)) {
+            CACHE_ACTION = CacheHelpManager.bindCacheHelperServiceV0(this);
+        } else {
+            CACHE_ACTION = CacheHelpManager.bindCacheHelperService();
         }
-        StateBar stateBar=getClass().getAnnotation(StateBar.class);
-        if(stateBar!=null){
-            __$$stateBarColor=stateBar.color();
-            if(stateBar.fontDark()){
+        StateBar stateBar = getClass().getAnnotation(StateBar.class);
+        if (stateBar != null) {
+            __$$stateBarColor = stateBar.color();
+            if (stateBar.fontDark()) {
                 setStateBarColorBright(__$$stateBarColor);
-            }else{
+            } else {
                 setStateBarColorDark(__$$stateBarColor);
             }
         }
+
     }
 
     @Override
     public void loadBitmapToImageView(String url, ImageView imageView) {
-        IMAGE_LOADER.loadImageCache(this,url,imageView);
+        IMAGE_LOADER.loadImageCache(this, url, imageView);
     }
+
 
     @Override
     public void loadBitmapToImageView(Uri uri, ImageView imageView) {
-        IMAGE_LOADER.loadImageCache(this,uri,imageView);
+        IMAGE_LOADER.loadImageCache(this, uri, imageView);
     }
 
     @Override
@@ -88,7 +94,7 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
 
     @Override
     public void cachePut(String key, String value) {
-        CACHE_ACTION.put(key,value);
+        CACHE_ACTION.put(key, value);
     }
 
     @Override
@@ -97,8 +103,8 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
     }
 
     @Override
-    public String cacheSet(String key,String value) {
-        return CACHE_ACTION.set(key,value);
+    public String cacheSet(String key, String value) {
+        return CACHE_ACTION.set(key, value);
     }
 
     @Override
@@ -122,10 +128,9 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
     }
 
 
-
     @Override
     public void showBasisMessageDialog(String message) {
-        final BasisDialog basisDialog=createBasisDialog();
+        final BasisDialog basisDialog = createBasisDialog();
         basisDialog.setContextMessage(message);
         basisDialog.setLeftButton("OK", new View.OnClickListener() {
             @Override
@@ -138,9 +143,9 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
 
     @Override
     public SelectDialog createSelectDialog(String title, String... item) {
-        SelectDialog selectDialog=new SelectDialog(this);
+        SelectDialog selectDialog = new SelectDialog(this);
         selectDialog.setDialogTitle(title);
-        for(String iter:item){
+        for (String iter : item) {
             selectDialog.addItem(iter);
         }
         return selectDialog;
@@ -148,17 +153,17 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
 
     @Override
     public void post(IHttpRequestBody requestBody, IHttpRequestResponse RequestResponse) {
-        HTTP_REQUEST_ACTION.post(requestBody,RequestResponse);
+        HTTP_REQUEST_ACTION.post(requestBody, RequestResponse);
     }
 
     @Override
     public void get(IHttpRequestBody requestBody, IHttpRequestResponse RequestResponse) {
-        HTTP_REQUEST_ACTION.get(requestBody,RequestResponse);
+        HTTP_REQUEST_ACTION.get(requestBody, RequestResponse);
     }
 
     @Override
     public void writeData(String path, String data) throws IOException {
-        BUFFER_IO_STREAM_ACTION.writeFile(path,data);
+        BUFFER_IO_STREAM_ACTION.writeFile(path, data);
     }
 
     @Override
@@ -168,75 +173,75 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
 
     @Override
     public void showToast(Object o) {
-        if(getApplication() instanceof YApplication){
+        if (getApplication() instanceof YApplication) {
             YApplication.getInstance().showToast(o);
-        }else{
-            Toast.makeText(this,o.toString(),Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, o.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void logDebug(String msg) {
-        YLog.debug(this,msg);
+        YLog.debug(this, msg);
     }
 
     @Override
     public void logWarn(String msg) {
-        YLog.warn(this,msg);
+        YLog.warn(this, msg);
     }
 
     @Override
     public void logInfo(String msg) {
-        YLog.info(this,msg);
+        YLog.info(this, msg);
     }
 
     @Override
     public void logError(String msg) {
-        YLog.error(this,msg);
+        YLog.error(this, msg);
     }
 
     @Override
     public void logDebug(String msg, Exception e) {
-        YLog.debug(this,msg,e);
+        YLog.debug(this, msg, e);
     }
 
     @Override
     public void logWarn(String msg, Exception e) {
-        YLog.warn(this,msg,e);
+        YLog.warn(this, msg, e);
     }
 
     @Override
     public void logInfo(String msg, Exception e) {
-        YLog.info(this,msg,e);
+        YLog.info(this, msg, e);
     }
 
     @Override
     public void logError(String msg, Exception e) {
-        YLog.error(this,msg,e);
+        YLog.error(this, msg, e);
     }
 
 
     private final void showMessageView(String msg,
-                                int backgroundColor,
-                                boolean setStabarBright,
-                                int textColor,
-                                int stabarColor,
-                                boolean stabarBright) {
+                                       int backgroundColor,
+                                       boolean setStabarBright,
+                                       int textColor,
+                                       int stabarColor,
+                                       boolean stabarBright) {
 
-        NotifyServiceManager.setNotifyServiceActivity(notifyService,this);
-        notifyService.showMessageView(msg,backgroundColor,setStabarBright,textColor,stabarColor,stabarBright);
+        NotifyServiceManager.setNotifyServiceActivity(notifyService, this);
+        notifyService.showMessageView(msg, backgroundColor, setStabarBright, textColor, stabarColor, stabarBright);
     }
 
     @Override
     public void showSuccressNotifyMsg(String msg) {
-        int stabarColor=0xffffffff;
-        boolean stabarBright=true;
-        StateBar stateBar=getClass().getAnnotation(StateBar.class);
-        if(stateBar!=null){
-            stabarColor=stateBar.color();
-            stabarBright=stateBar.fontDark();
-        }else{
-            YLog.warn(this,"showSuccressNotifyMsg ：We did not get the original StateBar annotation object for the Activity. Did we forget the annotation?");
+        int stabarColor = 0xffffffff;
+        boolean stabarBright = true;
+        StateBar stateBar = getClass().getAnnotation(StateBar.class);
+        if (stateBar != null) {
+            stabarColor = stateBar.color();
+            stabarBright = stateBar.fontDark();
+        } else {
+            YLog.warn(this, "showSuccressNotifyMsg ：We did not get the original StateBar annotation object for the Activity. Did we forget the annotation?");
         }
         showMessageView(msg,
                 0xff2E8B57,
@@ -248,14 +253,14 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
 
     @Override
     public void showErrorNotifyMsg(String msg) {
-        int stabarColor=0xffffffff;
-        boolean stabarBright=true;
-        StateBar stateBar=getClass().getAnnotation(StateBar.class);
-        if(stateBar!=null){
-            stabarColor=stateBar.color();
-            stabarBright=stateBar.fontDark();
-        }else{
-            YLog.warn(this,"showErrorNotifyMsg ：We did not get the original StateBar annotation object for the Activity. Did we forget the annotation?");
+        int stabarColor = 0xffffffff;
+        boolean stabarBright = true;
+        StateBar stateBar = getClass().getAnnotation(StateBar.class);
+        if (stateBar != null) {
+            stabarColor = stateBar.color();
+            stabarBright = stateBar.fontDark();
+        } else {
+            YLog.warn(this, "showErrorNotifyMsg ：We did not get the original StateBar annotation object for the Activity. Did we forget the annotation?");
         }
         showMessageView(msg,
                 0xffe34742,
@@ -267,22 +272,22 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
 
     @Override
     public void setStateBarColorBright(int color) {
-        StatusBarCompat.setStatusBarColor(getWindow(),color,true);
+        StatusBarCompat.setStatusBarColor(getWindow(), color, true);
     }
 
     @Override
     public void setStateBarColorDark(int color) {
-        StatusBarCompat.setStatusBarColor(getWindow(),color,false);
+        StatusBarCompat.setStatusBarColor(getWindow(), color, false);
     }
 
     @Override
     public void showProgressDialog(String message) {
-        if(progressDialog==null){
-            progressDialog=new ProgressDialog(this);
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
         }
-        if(progressDialog.isShowing()){
+        if (progressDialog.isShowing()) {
             progressDialog.setMessage(message);
-        }else{
+        } else {
             progressDialog.setMessage(message);
             progressDialog.show();
         }
@@ -295,7 +300,7 @@ public class YBaseActivity extends AppCompatActivity implements IYActivityInterf
 
     @Override
     public void closeProgressDialog() {
-        if(progressDialog==null || !progressDialog.isShowing()){
+        if (progressDialog == null || !progressDialog.isShowing()) {
             return;
         }
         progressDialog.dismiss();
