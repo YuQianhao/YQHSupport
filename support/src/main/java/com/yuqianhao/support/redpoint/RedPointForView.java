@@ -1,4 +1,4 @@
-package com.yuqianhao.support.test;
+package com.yuqianhao.support.redpoint;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ReadPoint {
+public @interface RedPointForView {
 
-    int[] types();
-
+    int[] typeView();//这个表示控件view需要接收小红点的类型
 }

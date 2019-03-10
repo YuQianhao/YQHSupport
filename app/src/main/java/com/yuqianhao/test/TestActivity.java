@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.yuqianhao.support.activity.YActivity;
-import com.yuqianhao.support.test.*;
-import com.yuqianhao.support.test.INoticeRegisterListener;
-import com.yuqianhao.support.test.NotceType;
-import com.yuqianhao.support.test.Notice;
-import com.yuqianhao.support.test.NoticeManager;
-import com.yuqianhao.support.test.NoticeType;
-import com.yuqianhao.support.test.ReadPoint;
+import com.yuqianhao.test.*;
+import com.yuqianhao.test.INoticeRegisterListener;
+import com.yuqianhao.test.NotceType;
+import com.yuqianhao.test.Notice;
+import com.yuqianhao.test.NoticeManager;
+import com.yuqianhao.test.NoticeType;
+import com.yuqianhao.test.ReadPoint;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -37,6 +37,7 @@ public class TestActivity extends YActivity implements INoticeRegisterListener {
         setContentView(R.layout.activity_main);
         makeReadPointListMap();
         NoticeManager.getInstance().register(this);
+
     }
 
     @Override
