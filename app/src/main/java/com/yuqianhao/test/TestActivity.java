@@ -4,18 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
-import com.yuqianhao.support.activity.YActivity;
 import com.yuqianhao.support.activity.YMessageActivity;
 import com.yuqianhao.support.redpoint.RedPointForAF;
 import com.yuqianhao.support.redpoint.RedPointForView;
 import com.yuqianhao.support.redpoint.RedPointManager;
 import com.yuqianhao.support.redpoint.RedPointType;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RedPointForAF(typeAF = {RedPointType.UserInfo, RedPointType.NoticeInfo, RedPointType.OrderUpdata})
 public class TestActivity extends YMessageActivity {

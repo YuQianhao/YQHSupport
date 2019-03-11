@@ -1,6 +1,7 @@
 package com.yuqianhao.support.activity;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,14 +14,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-public class YMessageActivity extends YBaseActivity implements  IRedPointCallback {
+public class YMessageActivity extends YActivityResultActivity implements  IRedPointCallback {
     private Map<Integer, List<View>> viewMap = new HashMap<>();
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        RedPointManager.getInstance().register(this);
+    protected void onStart() {
+        super.onStart();
         collectionRedPointView();
+        RedPointManager.getInstance().register(this);
     }
+
     @Override
     public void onResultRedPoint(List<RedPointBean> redPointBeanList) {
         //从viewMap中循环出需要展示的view
@@ -54,6 +57,7 @@ public class YMessageActivity extends YBaseActivity implements  IRedPointCallbac
         Field[] fields = getClass().getDeclaredFields();//反射类的所有属性
         if (fields != null) {
             for (Field itemField : fields) {
+                itemField.setAccessible(true);
                 RedPointForView annotation = itemField.getAnnotation(RedPointForView.class);//获取每个属性的注解
                 if (annotation != null) {
                     int[] typeViews = annotation.typeView();//获取属性被注解的值
