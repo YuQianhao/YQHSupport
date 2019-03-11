@@ -1,7 +1,10 @@
 package com.yuqianhao.support.redpoint;
 
+/**
+ * 小红点的类型
+ */
 public class RedPointType {
-    private static final int UserInfo = 0;
-    private static final int OrderUpdata = 1;
-    private static final int NoticeInfo = 2;
+    public static final int UserInfo = 100;
+    public static final int OrderUpdata = 101;
+    public static final int NoticeInfo = 102;
 }

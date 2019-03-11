@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.IdRes;
 
 /**
  * 创建通知栏的简化对象

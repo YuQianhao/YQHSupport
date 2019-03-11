@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +32,6 @@ import com.yuqianhao.support.service.image.ImageLoaderManager;
 import com.yuqianhao.support.thread.IThreadAction;
 import com.yuqianhao.support.thread.ThreadManager;
 
-import java.io.File;
 import java.io.IOException;
 
 public class YBaseActivity extends AppCompatActivity implements IYActivityInterface,
