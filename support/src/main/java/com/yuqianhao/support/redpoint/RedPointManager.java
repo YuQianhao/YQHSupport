@@ -24,7 +24,7 @@ public class RedPointManager {
 
     //A或者F注册绑定系小红点事件,并且获取需要显示的小红点的类型
     public void register(IRedPointCallback iRedPointCallback) {
-        RedPointForAF annotation = iRedPointCallback.getClass().getAnnotation(RedPointForAF.class);//通过反射获取A或者F的注解
+        RedPointAnnotations annotation = iRedPointCallback.getClass().getAnnotation(RedPointAnnotations.class);//通过反射获取A或者F的注解
         if (annotation != null) {
             iRedPointCallbackList.add(iRedPointCallback);//将被注释的A或者F存进集合中
         }
@@ -40,8 +40,8 @@ public class RedPointManager {
     //点击小红点
     public void readNotice(int type) {
         for (RedPointBean redPointBean : redPointList) {
-            if (type == redPointBean.getRed_type()) {
-                redPointBean.setRed_read(1);//将未读的小红点设置为已读
+            if (type == redPointBean.getType()) {
+                redPointBean.setRead(1);//将未读的小红点设置为已读
             }
         }
         for (IRedPointCallback iRedPointCallback : iRedPointCallbackList) {

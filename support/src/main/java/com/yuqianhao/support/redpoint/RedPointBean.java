@@ -4,47 +4,47 @@ package com.yuqianhao.support.redpoint;
  *小红点的实体类
  * */
 public class RedPointBean {
-    private int red_id;//红点的id
-    private String red_desc;//红点描述
-    private int red_type;//红点类型
-    private int red_read;//是否已读(0未读,1已读)
+    private int id;//红点的id
+    private String desc;//红点描述
+    private int type;//红点类型
+    private int read;//是否已读(0未读,1已读)
 
-    public RedPointBean(int red_id, String red_desc, int red_type, int red_read) {
-        this.red_id = red_id;
-        this.red_desc = red_desc;
-        this.red_type = red_type;
-        this.red_read = red_read;
+    public RedPointBean(int id, String desc, int type, int read) {
+        this.id = id;
+        this.desc = desc;
+        this.type = type;
+        this.read = read;
     }
 
-    public int getRed_id() {
-        return red_id;
+    public int getId() {
+        return id;
     }
 
-    public void setRed_id(int red_id) {
-        this.red_id = red_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getRed_desc() {
-        return red_desc;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setRed_desc(String red_desc) {
-        this.red_desc = red_desc;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
-    public int getRed_type() {
-        return red_type;
+    public int getType() {
+        return type;
     }
 
-    public void setRed_type(int red_type) {
-        this.red_type = red_type;
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public int getRed_read() {
-        return red_read;
+    public int getRead() {
+        return read;
     }
 
-    public void setRed_read(int red_read) {
-        this.red_read = red_read;
+    public void setRead(int read) {
+        this.read = read;
     }
 }

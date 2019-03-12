@@ -12,28 +12,4 @@
             android:padding="20dp"
             android:text="1111111"
             android:layout_height="wrap_content"/>
-    <TextView
-            android:id="@+id/text_2"
-            android:layout_width="wrap_content"
-            android:padding="20dp"
-            android:text="2222222"
-            android:layout_height="wrap_content"/>
-    <TextView
-            android:id="@+id/text_3"
-            android:layout_width="wrap_content"
-            android:padding="20dp"
-            android:text="3333333"
-            android:layout_height="wrap_content"/>
-    <TextView
-            android:id="@+id/text_4"
-            android:layout_width="wrap_content"
-            android:padding="20dp"
-            android:text="4444444"
-            android:layout_height="wrap_content"/>
-    <TextView
-            android:id="@+id/text_5"
-            android:padding="20dp"
-            android:text="555555"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 </LinearLayout>

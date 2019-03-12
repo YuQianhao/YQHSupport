@@ -1,12 +1,6 @@
 package com.yuqianhao.support.activity;
 
-import android.content.Intent;
-import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
-import com.yuqianhao.support.activity.YBaseActivity;
 import com.yuqianhao.support.redpoint.*;
 
 import java.lang.reflect.Field;
@@ -30,13 +24,13 @@ public class YMessageActivity extends YActivityResultActivity implements  IRedPo
         List<View> showViews = new ArrayList<>();//需要展示的小红点
         List<View> hindViews = new ArrayList<>();//需要隐藏的小红点
         for (RedPointBean redPointBean : redPointBeanList) {
-            if (redPointBean.getRed_read() == 0) {//未读状态小红点
-                List<View> views = viewMap.get(redPointBean.getRed_type());
+            if (redPointBean.getRead() == 0) {//未读状态小红点
+                List<View> views = viewMap.get(redPointBean.getType());
                 if (views != null) {
                     showViews.addAll(views);
                 }
             } else {//已读小红点
-                List<View> views = viewMap.get(redPointBean.getRed_type());
+                List<View> views = viewMap.get(redPointBean.getType());
                 if (views != null) {
                     hindViews.addAll(views);
                 }
@@ -58,9 +52,9 @@ public class YMessageActivity extends YActivityResultActivity implements  IRedPo
         if (fields != null) {
             for (Field itemField : fields) {
                 itemField.setAccessible(true);
-                RedPointForView annotation = itemField.getAnnotation(RedPointForView.class);//获取每个属性的注解
+                RedPointView annotation = itemField.getAnnotation(RedPointView.class);//获取每个属性的注解
                 if (annotation != null) {
-                    int[] typeViews = annotation.typeView();//获取属性被注解的值
+                    int[] typeViews = annotation.type();//获取属性被注解的值
                     try {
                         View view = (View) itemField.get(this);//反射类获取view
                         for (int type : typeViews) {//循环typeViews

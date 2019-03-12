@@ -5,7 +5,6 @@ import java.util.List;
  * 小红点传递数据
  */
 public interface IRedPointCallback {
-
-    void onResultRedPoint(List<RedPointBean> redPointBeanList);//添加小红点
+    void onResultRedPoint(List<RedPointBean> redPointBeanList);
 
 }
