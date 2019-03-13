@@ -1,7 +1,16 @@
-package com.yuqianhao.support.activity;
+package com.yuqianhao.support.fragment;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
-import com.yuqianhao.support.redpoint.*;
+import android.view.ViewGroup;
+import com.yuqianhao.support.redpoint.IRedPointCallback;
+import com.yuqianhao.support.redpoint.RedPointBean;
+import com.yuqianhao.support.redpoint.RedPointManager;
+import com.yuqianhao.support.redpoint.RedPointView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -9,15 +18,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class YMessageActivity extends YActivityResultActivity implements IRedPointCallback {
+public class YMessageFragment extends Fragment implements IRedPointCallback {
+
     private Map<Integer, List<View>> viewMap = new HashMap<>();
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         collectionRedPointView();
         RedPointManager.getInstance().register(this);
     }
+
 
     @Override
     public void onResultRedPoint(List<RedPointBean> redPointBeanList) {
@@ -79,7 +90,7 @@ public class YMessageActivity extends YActivityResultActivity implements IRedPoi
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         RedPointManager.getInstance().unRegister(this);
     }
