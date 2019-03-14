@@ -23,8 +23,9 @@ public class RedPointManager {
 
     /**
      * 将通知消息对象插入到队列中
+     *
      * @param redPointBean 变参，可以有多个对象
-     * */
+     */
     public void putNotice(RedPointBean... redPointBean) {
         for (RedPointBean redPointBean1 : redPointBean) {
             redPointList.add(redPointBean1);
@@ -33,8 +34,9 @@ public class RedPointManager {
 
     /**
      * 将消息列表插入到消息队列中
+     *
      * @param list 消息列表
-     * */
+     */
     public void putNotice(List<RedPointBean> list) {
         if (list != null) {
             redPointList.addAll(list);
@@ -59,12 +61,16 @@ public class RedPointManager {
         if (annotation != null) {
             iRedPointCallbackList.add(iRedPointCallback);//将被注释的A或者F存进集合中
         }
-        iRedPointCallback.onResultRedPoint(redPointList);//通知界面,小红点的数据
+        if (redPointList != null && redPointList.size() > 0) {
+            iRedPointCallback.onResultRedPoint(redPointList);//通知界面,小红点的数据
+        }
     }
 
     //A或者F解绑系解绑系小红点时间
     public void unRegister(IRedPointCallback iRedPointCallback) {
-        iRedPointCallbackList.remove(iRedPointCallback);
+        if (iRedPointCallback != null) {
+            iRedPointCallbackList.remove(iRedPointCallback);
+        }
 
     }
 
