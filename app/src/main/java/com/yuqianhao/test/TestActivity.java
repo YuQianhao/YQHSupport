@@ -2,10 +2,12 @@ package com.yuqianhao.test;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import com.yuqianhao.support.activity.YMessageActivity;
+import android.widget.Toast;
 
-public class TestActivity extends YMessageActivity {
+public class TestActivity extends YBaseActivity {
 
+    @PresenterAutoCreate(params = TestActivity.class)
+    private TestModule testModule;
 
 
     @Override
@@ -14,5 +16,15 @@ public class TestActivity extends YMessageActivity {
         setContentView(R.layout.activity_main);
     }
 
+    public void showToast(){
+        Toast.makeText(this,"Hello World!",Toast.LENGTH_SHORT).show();
+    }
 
+
+}
+
+class TestModule{
+    public TestModule(TestActivity testActivity){
+        testActivity.showToast();
+    }
 }
