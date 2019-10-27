@@ -33,7 +33,7 @@ public class YImageLoadActivity extends YPermissionActivity {
     }
 
     /**
-     * 想本地文件中获取一张图片，结果将通过方法 {@link #onImageLoadResult(Uri, String)} 返回，重写该方法即可得到路径
+     * 想本地文件中获取一张图片，结果将通过方法 {@link #onImageLoadResult(Uri)} 返回，重写该方法即可得到路径
      * */
     public void loadBitmapForStorage(){
         Intent intent=new Intent();
@@ -42,16 +42,11 @@ public class YImageLoadActivity extends YPermissionActivity {
         startActivityForResult(intent, $REQUEST_STORAGE);
     }
 
-    private final void onImageLoadResult(Uri uri){
-        onImageLoadResult(uri, UriUtils.getPath(this,uri));
-    }
-
     /**
      * 获取到的图片的路径
      * @param imageUri 图片的Uri路径
-     * @param imagePath 图片的String路径
      * */
-    protected void onImageLoadResult(Uri imageUri,String imagePath){}
+    protected void onImageLoadResult(Uri imageUri){}
 
 
     @CallSuper
