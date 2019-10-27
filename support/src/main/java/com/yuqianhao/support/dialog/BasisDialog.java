@@ -95,7 +95,7 @@ public class BasisDialog{
         });
         Window window=mContextDialog.getWindow();
         window.setWindowAnimations(R.style.basisDialogAnimation);
-        mRootView.setLayoutParams(new FrameLayout.LayoutParams((int) (mDisplayMetrics.widthPixels*0.75), ViewGroup.LayoutParams.MATCH_PARENT));
+        mRootView.setLayoutParams(new FrameLayout.LayoutParams((int) (Math.min(mDisplayMetrics.widthPixels,mDisplayMetrics.heightPixels)*0.75), ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     private void initResources(){
