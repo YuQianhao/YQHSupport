@@ -19,7 +19,7 @@
 2、将这个依赖命令添加到app或者需要依赖这个library的build.gradle中。
 ```java
 	dependencies {
-	        implementation 'com.github.YuQianhao:YQHSupport:0.0.5'
+	        implementation 'com.github.YuQianhao:YQHSupport:0.0.6'
 	}
 ```
 ### Maven：

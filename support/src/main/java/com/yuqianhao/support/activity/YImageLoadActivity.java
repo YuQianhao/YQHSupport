@@ -24,7 +24,7 @@ public class YImageLoadActivity extends YPermissionActivity {
      * 从相机获取一张图片，结果将通过方法 {@link #onImageLoadResult(Uri, String)} 返回，重写该方法即可得到路径
      * @param saveFile 要临时保存相机拍出来的照片的文件，要求该文件必须存在
      * */
-    protected void loadBitmapForCamera(File saveFile){
+    public void loadBitmapForCamera(File saveFile){
         $cameraResultURI= FileProvider.getUriForFile(this,
                 getPackageName() + ".provider",saveFile);
         Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -35,7 +35,7 @@ public class YImageLoadActivity extends YPermissionActivity {
     /**
      * 想本地文件中获取一张图片，结果将通过方法 {@link #onImageLoadResult(Uri, String)} 返回，重写该方法即可得到路径
      * */
-    protected void loadBitmapForStorage(){
+    public void loadBitmapForStorage(){
         Intent intent=new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
